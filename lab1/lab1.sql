@@ -13,3 +13,4 @@ SELECT country.name, city.name, elevation FROM country, city WHERE city.country 
 (SELECT name FROM city WHERE name LIKE '%q') UNION (SELECT name FROM country WHERE name LIKE 'Z%');
 
 -- Q: how do we execute the sql file?
+-- A: in postgres, \i name_of_file.sql
