@@ -1,10 +1,16 @@
 --DROP MATERIALIZED VIEW PopData;
 CREATE MATERIALIZED VIEW PopData AS
-  SELECT citypops.city, citypops.country, citypops.year, citypops.population,
-         city.longitude, city.latitude, city.elevation,
-         economy.agriculture, economy.service, economy.industry, economy.inflation
-  FROM citypops, city, economy
-  WHERE city.name = citypops.city AND economy.country = city.country;
+  SELECT city, country, year, population
+  FROM citypops
+  JOIN city ON citypops.city = city.name;
+
+  -- SELECT longitude, latitude, elevation
+  -- FROM city
+  -- UNION ALL
+  -- SELECT agriculture, service, industry, inflation
+  -- FROM economy;
 
 SELECT * FROM PopData WHERE city LIKE 'Santiago%';
-SELECT * FROM PopData WHERE city LIKE 'Santiago%';
+
+
+-- run: \i lab2.sql
