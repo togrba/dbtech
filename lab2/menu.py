@@ -5,7 +5,7 @@ from sys import argv
 class Program:
     def __init__(self): #PG-connection setup
         # local server:
-        params = {'host':'Bang', 'user':'Bang', 'database':'Bang', 'password':''} # OBS WHAT ARE THESE?!
+        params = {'host':'localhost', 'user':'Bang', 'database':'Bang', 'password':''}
         # kth server:
         # params = {'host':'nestor2.csc.kth.se', 'user': 'yourkthusername', 'database':'', 'password':'yournestorpassword'}
         self.conn = pgdb.Connection(**params)

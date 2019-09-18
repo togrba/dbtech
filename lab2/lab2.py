@@ -1,23 +1,11 @@
 #!/usr/bin/python
 import pgdb
 import matplotlib
-# u-shell use:
-#matplotlib.use('Agg') only use this on u-shell, deactivates interactive graphics
 import matplotlib.pyplot as plt
-# This scripts illustrates how you can use output from a query, cast it to python floats,
-# and then use a figure plotting library called Matplotlib to create a scatterplot of the
-# data.
-
-# documentation of plotting library: https://matplotlib.org/, you can use any other
-# library if you like
-
-
-# If you are using a local postgres server as user postgres with default database 'postgres'
 params = {'host':'localhost', 'user':'Bang', 'database':'Bang', 'password':''}
-# If you are using nestor2, copy this python file to u-shell and then execute there
-# note that you can connect to nestor2 also from your home computer directly once you have
-# the password.
-# params = {'host':'nestor2.csc.kth.se', 'user': 'your_kthusername', 'database':'', 'password':'your_postgres_password'}
+
+# Q2A
+
 
 connection1 = pgdb.Connection(**params)
 connection1.autocommit=False

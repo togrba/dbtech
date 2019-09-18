@@ -16,4 +16,4 @@ SELECT * FROM PopData WHERE city LIKE 'Santiago%';
 -- Q1B
 
 -- We choose materialized view instead of virtual view because we want to work
--- with a stored table.
+-- with a stored table.2

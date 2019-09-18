@@ -7,7 +7,7 @@ import pgdb
 # see http://www.pygresql.org/contents/tutorial.html#first-steps-with-the-db-api-2-0-interface
 
 #If you are using a local postgres server as user postgres with default database 'postgres'
-params = {'host':'', 'user':'postgres', 'database':'', 'password':''}
+params = {'host':'localhost', 'user':'Bang', 'database':'Bang', 'password':''}
 #If you are using nestor2, copy this python file to u-shell and then execute there
 # params = {'host':'nestor2.csc.kth.se', 'user': 'your_kthusername', 'database':'', 'password':'your_postgres_password'}
 
