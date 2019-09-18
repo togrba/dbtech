@@ -7,9 +7,9 @@ import pgdb
 # see http://www.pygresql.org/contents/tutorial.html#first-steps-with-the-db-api-2-0-interface
 
 #If you are using a local postgres server as user postgres with default database 'postgres'
-#params = {'host':'', 'user':'postgres', 'database':'', 'password':''}
-#If you are using nestor2, copy this python file to u-shell and then execute there 
-params = {'host':'nestor2.csc.kth.se', 'user': 'your_kthusername', 'database':'', 'password':'your_postgres_password'}
+params = {'host':'', 'user':'postgres', 'database':'', 'password':''}
+#If you are using nestor2, copy this python file to u-shell and then execute there
+# params = {'host':'nestor2.csc.kth.se', 'user': 'your_kthusername', 'database':'', 'password':'your_postgres_password'}
 
 # We work with two connections to the database, simulating concurrent users. These
 # connections could be remote, in separate programs etc, but we run them in the same file
@@ -28,12 +28,12 @@ def drop():
     try:
         query = "DROP TABLE Sales";
         cursor1.execute(query)
-        connection1.commit()  
+        connection1.commit()
         # by default in pgdb, all executed queries for connection 1 up to here form a transaction
         # we can also explicitly start tranaction by executing BEGIN TRANSACTION
     except:
         # Errors in python are caught using try ... except
-        print "ROLLBACK: Sales table does not exists or other error."
+        print("ROLLBACK: Sales table does not exists or other error.")
         connection1.rollback()
         pass
 
@@ -85,9 +85,9 @@ def scenario1():
 def showall():
     cursor1.execute("SELECT * FROM Sales;");
     connection1.commit()
-    print cursor1.rowcount
+    print(cursor1.rowcount)
     for i in range(cursor1.rowcount):
-        print cursor1.fetchone()
+        print(cursor1.fetchone())
     #results = cursor1.fetchall()
     #print "Sales relation contents:"
     #for r in results:
@@ -104,4 +104,3 @@ showall()
 scenario1()
 showall()
 close()
-

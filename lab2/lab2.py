@@ -1,3 +1,0 @@
-# Q2A
-
-function
