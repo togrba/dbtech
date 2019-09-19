@@ -12,41 +12,41 @@ connection1.autocommit=False
 cursor1 = connection1.cursor()
 
 
-def drop():
-    # delete the table XYData if it does already exist
-    try:
-        query = "DROP TABLE XYData";
-        cursor1.execute(query)
-        connection1.commit()
-        # by default in pgdb, all executed queries for connection 1 up to here form a transaction
-        # we can also explicitly start tranaction by executing BEGIN TRANSACTION
-    except:
-        # Errors in python are caught using try ... except
-        print("ROLLBACK: XYData table does not exists or other error.")
-        connection1.rollback()
-        pass
+# def drop():
+#     # delete the table XYData if it does already exist
+#     try:
+#         query = "DROP TABLE XYData";
+#         cursor1.execute(query)
+#         connection1.commit()
+#         # by default in pgdb, all executed queries for connection 1 up to here form a transaction
+#         # we can also explicitly start tranaction by executing BEGIN TRANSACTION
+#     except:
+#         # Errors in python are caught using try ... except
+#         print("ROLLBACK: XYData table does not exists or other error.")
+#         connection1.rollback()
+#         pass
 
-def init():
-    # Create table sales and add two initial tuples
-    query = "CREATE TABLE XYData(x decimal, y decimal)";
-    cursor1.execute(query)
-    query = """INSERT INTO XYData VALUES(12.1, 1.00)""";
-    cursor1.execute(query)
-    query = """INSERT INTO XYData VALUES(16.3, 12.1)""";
-    cursor1.execute(query)
-    query = """INSERT INTO XYData VALUES(6.3, 22.1)""";
-    cursor1.execute(query)
-    query = """INSERT INTO XYData VALUES(12.3, 32.1)""";
-    cursor1.execute(query)
-    query = """INSERT INTO XYData VALUES(NULL, 25.1)""";
-    cursor1.execute(query)
-
-    # this commits all executed queries forming a transaction up to this point
-    connection1.commit()
+# def init():
+#     # Create table sales and add two initial tuples
+#     query = "CREATE TABLE XYData(x decimal, y decimal)";
+#     cursor1.execute(query)
+#     query = """INSERT INTO XYData VALUES(12.1, 1.00)""";
+#     cursor1.execute(query)
+#     query = """INSERT INTO XYData VALUES(16.3, 12.1)""";
+#     cursor1.execute(query)
+#     query = """INSERT INTO XYData VALUES(6.3, 22.1)""";
+#     cursor1.execute(query)
+#     query = """INSERT INTO XYData VALUES(12.3, 32.1)""";
+#     cursor1.execute(query)
+#     query = """INSERT INTO XYData VALUES(NULL, 25.1)""";
+#     cursor1.execute(query)
+#
+#     # this commits all executed queries forming a transaction up to this point
+#     connection1.commit()
 
 def query():
     # Here we test some concurrency issues.
-    xy = "select x, y from XYData";
+    xy = "select year, population from popdata";
     print("U1: (start) "+ xy)
     cursor1.execute(xy)
     data = cursor1.fetchall()
@@ -67,13 +67,14 @@ def query():
     print("ys:", ys)
     return [xs, ys]
 
+
 def close():
     connection1.close()
 
 
 # when calling python filename.py the following functions will be executed:
-drop()
-init()
+# drop()
+# init()
 [xs, ys] = query()
 plt.scatter(xs, ys)
 plt.show()  # display figure if you run this code locally
