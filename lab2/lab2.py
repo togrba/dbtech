@@ -2,7 +2,7 @@
 import pgdb
 import matplotlib
 import matplotlib.pyplot as plt
-params = {'host':'localhost', 'user':'Bang', 'database':'Bang', 'password':''}
+params = {'host':'localhost', 'user':'postgres', 'database':'postgres', 'password':'Kth_derp667'}
 
 connection1 = pgdb.Connection(**params)
 connection1.autocommit=False
@@ -152,7 +152,7 @@ def close():
 [xs, ys] = query()
 plt.scatter(xs, ys)
 plt.xlabel("year")
-plt.errorbar(xs, ys, yerr=1, linestyle="None")
+plt.errorbar(xs, ys, yerr=100000, xerr=3, linestyle='None')
 plt.show()  # display figure if you run this code locally
 plt.savefig("figure.png") # save figure as image in local directory
 close()
