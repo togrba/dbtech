@@ -4,9 +4,6 @@ import matplotlib
 import matplotlib.pyplot as plt
 params = {'host':'localhost', 'user':'Bang', 'database':'Bang', 'password':''}
 
-# Q2A
-
-
 connection1 = pgdb.Connection(**params)
 connection1.autocommit=False
 cursor1 = connection1.cursor()
@@ -44,9 +41,63 @@ cursor1 = connection1.cursor()
 #     # this commits all executed queries forming a transaction up to this point
 #     connection1.commit()
 
+# Q2A
+
+# Year - population
+# def query():
+#     # Here we test some concurrency issues.
+#     xy = "SELECT year, population FROM popdata";
+#     print("U1: (start) "+ xy)
+#     cursor1.execute(xy)
+#     data = cursor1.fetchall()
+#     connection1.commit()
+#     xs= []
+#     ys= []
+#     for r in data:
+#         # you access ith component of row r with r[i], indexing starts with 0
+#         # check for null values represented as "None" in python before conversion and drop
+#         # row whenever NULL occurs
+#         print("Considering tuple", r)
+#         if (r[0]!=None and r[0]!=None):
+#             xs.append(float(r[0]))
+#             ys.append(float(r[1]))
+#         else:
+#             print("Dropped tuple ", r)
+#     print("xs:", xs)
+#     print("ys:", ys)
+#     return [xs, ys]
+
+# Number of cities - year
+# def query():
+#     # Here we test some concurrency issues.
+#     xy = "SELECT year, COUNT(city) FROM popdata GROUP BY year";
+#     print("U1: (start) "+ xy)
+#     cursor1.execute(xy)
+#     data = cursor1.fetchall()
+#     connection1.commit()
+#     xs= []
+#     ys= []
+#     for r in data:
+#         # you access ith component of row r with r[i], indexing starts with 0
+#         # check for null values represented as "None" in python before conversion and drop
+#         # row whenever NULL occurs
+#         print("Considering tuple", r)
+#         if (r[0]!=None and r[0]!=None):
+#             xs.append(float(r[0]))
+#             ys.append(float(r[1]))
+#         else:
+#             print("Dropped tuple ", r)
+#     print("xs:", xs)
+#     print("ys:", ys)
+#     return [xs, ys]
+#
+# def close():
+#     connection1.close()
+
+# Mean population - decade
 def query():
     # Here we test some concurrency issues.
-    xy = "select year, population from popdata";
+    xy = "SELECT population, COUNT(city) FROM popdata GROUP BY population";
     print("U1: (start) "+ xy)
     cursor1.execute(xy)
     data = cursor1.fetchall()
@@ -67,7 +118,6 @@ def query():
     print("ys:", ys)
     return [xs, ys]
 
-
 def close():
     connection1.close()
 
@@ -77,6 +127,7 @@ def close():
 # init()
 [xs, ys] = query()
 plt.scatter(xs, ys)
+plt.xlabel("year")
 plt.show()  # display figure if you run this code locally
 plt.savefig("figure.png") # save figure as image in local directory
 close()
