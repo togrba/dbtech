@@ -24,6 +24,6 @@ CREATE VIEW LinearPrediction AS
   regr_slope(population,year) AS a, regr_intercept(population,year) AS b, regr_r2(population,year) AS r2,
   COUNT(population) AS nsamples, MIN(year) AS yearfrom, MAX(year) AS yearto,
   MIN(population) AS minpop, MAX(population) AS maxpop
-  FROM PopData;
+  FROM PopData GROUP BY (name, country);
 
 SELECT * FROM LinearPrediction WHERE name LIKE 'Santi%';
