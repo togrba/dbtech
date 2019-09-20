@@ -30,12 +30,12 @@ class Program:
                     return choice
                 print("Invalid choice.")
             except (NameError,ValueError, TypeError,SyntaxError):
-                print("That was not a number, genious.... :(")
+                print("That was not valid, cyka.... :(")
 
     def population_query(self):
-        minpop = input("min_population: ")
-        maxpop = input("max_population: ")
-        query ="SELECT * FROM city WHERE population >=%s AND population <= %s" % (minpop, maxpop)
+        city = input("city_name: ")
+        country = input("country_code: ")
+        query ="SELECT * FROM popdata WHERE city LIKE '%s' AND country LIKE '%s'" % (city, country)
         print("Will execute: ", query)
 
         self.cur.execute(query)

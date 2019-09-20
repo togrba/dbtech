@@ -95,28 +95,28 @@ cursor1 = connection1.cursor()
 #     connection1.close()
 
 # Mean population - decade
-def query():
-    # Here we test some concurrency issues.
-    xy = "SELECT FLOOR(year/10)*10, AVG(population) FROM popdata GROUP BY year";
-    print("U1: (start) "+ xy)
-    cursor1.execute(xy)
-    data = cursor1.fetchall()
-    connection1.commit()
-    xs= []
-    ys= []
-    for r in data:
-        # you access ith component of row r with r[i], indexing starts with 0
-        # check for null values represented as "None" in python before conversion and drop
-        # row whenever NULL occurs
-        print("Considering tuple", r)
-        if (r[0]!=None and r[0]!=None):
-            xs.append(float(r[0]))
-            ys.append(float(r[1]))
-        else:
-            print("Dropped tuple ", r)
-    print("xs:", xs)
-    print("ys:", ys)
-    return [xs, ys]
+# def query():
+#     # Here we test some concurrency issues.
+#     xy = "SELECT FLOOR(year/10)*10, AVG(population) FROM popdata GROUP BY year";
+#     print("U1: (start) "+ xy)
+#     cursor1.execute(xy)
+#     data = cursor1.fetchall()
+#     connection1.commit()
+#     xs= []
+#     ys= []
+#     for r in data:
+#         # you access ith component of row r with r[i], indexing starts with 0
+#         # check for null values represented as "None" in python before conversion and drop
+#         # row whenever NULL occurs
+#         print("Considering tuple", r)
+#         if (r[0]!=None and r[0]!=None):
+#             xs.append(float(r[0]))
+#             ys.append(float(r[1]))
+#         else:
+#             print("Dropped tuple ", r)
+#     print("xs:", xs)
+#     print("ys:", ys)
+#     return [xs, ys]
 
 # Standard deviation - decade
 # def query():
@@ -141,6 +141,30 @@ def query():
 #     print("xs:", xs)
 #     print("ys:", ys)
 #     return [xs, ys]
+
+#ASK FOR CITY, COUNTRY
+def query():
+    xy = input("Enter city name: ")
+    yz = input("Enter country code: ")
+    print("U1: (start) "+ xy + yz)
+    cursor1.execute(xy)
+    data = cursor1.fetchall()
+    connection1.commit()
+    xs= []
+    ys= []
+    for r in data:
+        # you access ith component of row r with r[i], indexing starts with 0
+        # check for null values represented as "None" in python before conversion and drop
+        # row whenever NULL occurs
+        print("Considering tuple", r)
+        if (r[0]!=None and r[0]!=None):
+            xs.append(float(r[0]))
+            ys.append(float(r[1]))
+        else:
+            print("Dropped tuple ", r)
+    print("xs:", xs)
+    print("ys:", ys)
+    return [xs, ys]
 
 def close():
     connection1.close()
