@@ -95,15 +95,18 @@ cursor1 = connection1.cursor()
 #     connection1.close()
 
 # Mean population - decade
+# Standard deviation - decade
 def query():
     # Here we test some concurrency issues.
-    xy = "SELECT FLOOR(year/10)*10, AVG(population) FROM popdata GROUP BY year";
+    xy = "SELECT FLOOR(year/10)*10, AVG(population), STDDEV_POP(population) FROM popdata GROUP BY year ORDER BY year";
     print("U1: (start) "+ xy)
     cursor1.execute(xy)
     data = cursor1.fetchall()
     connection1.commit()
     xs= []
     ys= []
+    error_mean= []
+    error_std= []
     for r in data:
         # you access ith component of row r with r[i], indexing starts with 0
         # check for null values represented as "None" in python before conversion and drop
@@ -112,35 +115,14 @@ def query():
         if (r[0]!=None and r[0]!=None):
             xs.append(float(r[0]))
             ys.append(float(r[1]))
+            #error_mean.append(float(r[1]))     ####
+            #error_std.append(float(r[1]))      ####
         else:
             print("Dropped tuple ", r)
     print("xs:", xs)
     print("ys:", ys)
-    return [xs, ys]
+    return [xs, ys, error_mean, error_std]  ####
 
-# Standard deviation - decade
-# def query():
-#     # Here we test some concurrency issues.
-#     xy = "SELECT FLOOR(year/10)*10, STDDEV_POP(population) FROM popdata GROUP BY year";
-#     print("U1: (start) "+ xy)
-#     cursor1.execute(xy)
-#     data = cursor1.fetchall()
-#     connection1.commit()
-#     xs= []
-#     ys= []
-#     for r in data:
-#         # you access ith component of row r with r[i], indexing starts with 0
-#         # check for null values represented as "None" in python before conversion and drop
-#         # row whenever NULL occurs
-#         print("Considering tuple", r)
-#         if (r[0]!=None and r[0]!=None):
-#             xs.append(float(r[0]))
-#             ys.append(float(r[1]))
-#         else:
-#             print("Dropped tuple ", r)
-#     print("xs:", xs)
-#     print("ys:", ys)
-#     return [xs, ys]
 
 def close():
     connection1.close()
@@ -149,10 +131,10 @@ def close():
 # when calling python filename.py the following functions will be executed:
 # drop()
 # init()
-[xs, ys] = query()
+[xs, ys, error_mean, error_std] = query()   ####
 plt.scatter(xs, ys)
 plt.xlabel("year")
-plt.errorbar(xs, ys, yerr=1, linestyle="None")
+# plt.errorbar(xs, ys, yerr=error_mean, xerr=error_std, fmt="", color="r") ####
 plt.show()  # display figure if you run this code locally
 plt.savefig("figure.png") # save figure as image in local directory
 close()
