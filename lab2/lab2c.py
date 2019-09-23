@@ -1,5 +1,7 @@
 #!/usr/bin/python
 import pgdb
+import matplotlib
+import matplotlib.pyplot as plt
 from sys import argv
 
 class Program:
@@ -48,8 +50,24 @@ class Program:
 
     def print_answer(self):
         print("-----------------------------------")
-        print("\n".join([", ".join([str(a) for a in x]) for x in self.cur.fetchall()]))
+        xs = []
+        ys = []
+        result = []
+        for r in self.cur.fetchall():
+            if (r[0] != None and r[0] != None):
+                xs.append(float(r[0]))
+                ys.append(float(r[2]))
+                result.append(r)
+            else:
+                print("Dropped tuple ", r)
+        print("\n".join([", ".join([str(a) for a in x]) for x in result]))
         print("-----------------------------------")
+
+        plt.scatter(xs, ys)
+        plt.xlabel("year")
+        plt.ylabel("population")
+        plt.show()
+        print(xs,ys)
 
     def run(self):
         while True:
