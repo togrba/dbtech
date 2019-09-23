@@ -18,6 +18,9 @@
 -- We choose materialized view instead of virtual view because we want to work
 -- with a stored table.2
 
+
+-- Q2B
+
 DROP VIEW LinearPrediction;
 CREATE VIEW LinearPrediction AS
   SELECT city AS name, country,

@@ -8,39 +8,6 @@ connection1 = pgdb.Connection(**params)
 connection1.autocommit=False
 cursor1 = connection1.cursor()
 
-
-# def drop():
-#     # delete the table XYData if it does already exist
-#     try:
-#         query = "DROP TABLE XYData";
-#         cursor1.execute(query)
-#         connection1.commit()
-#         # by default in pgdb, all executed queries for connection 1 up to here form a transaction
-#         # we can also explicitly start tranaction by executing BEGIN TRANSACTION
-#     except:
-#         # Errors in python are caught using try ... except
-#         print("ROLLBACK: XYData table does not exists or other error.")
-#         connection1.rollback()
-#         pass
-
-# def init():
-#     # Create table sales and add two initial tuples
-#     query = "CREATE TABLE XYData(x decimal, y decimal)";
-#     cursor1.execute(query)
-#     query = """INSERT INTO XYData VALUES(12.1, 1.00)""";
-#     cursor1.execute(query)
-#     query = """INSERT INTO XYData VALUES(16.3, 12.1)""";
-#     cursor1.execute(query)
-#     query = """INSERT INTO XYData VALUES(6.3, 22.1)""";
-#     cursor1.execute(query)
-#     query = """INSERT INTO XYData VALUES(12.3, 32.1)""";
-#     cursor1.execute(query)
-#     query = """INSERT INTO XYData VALUES(NULL, 25.1)""";
-#     cursor1.execute(query)
-#
-#     # this commits all executed queries forming a transaction up to this point
-#     connection1.commit()
-
 # Q2A
 
 # Year - population
@@ -105,7 +72,6 @@ def query():
     connection1.commit()
     xs= []
     ys= []
-    error_mean= []
     error_std= []
     for r in data:
         # you access ith component of row r with r[i], indexing starts with 0
@@ -115,26 +81,23 @@ def query():
         if (r[0]!=None and r[0]!=None):
             xs.append(float(r[0]))
             ys.append(float(r[1]))
-            #error_mean.append(float(r[1]))     ####
-            #error_std.append(float(r[1]))      ####
+            error_std.append(float(r[2]))
         else:
             print("Dropped tuple ", r)
     print("xs:", xs)
     print("ys:", ys)
-    return [xs, ys, error_mean, error_std]  ####
-
+    print("error_std:", error_std)
+    return [xs, ys, error_std]
 
 def close():
     connection1.close()
 
 
-# when calling python filename.py the following functions will be executed:
-# drop()
-# init()
-[xs, ys, error_mean, error_std] = query()   ####
+# when calling python lab2.py the following functions will be executed:
+[xs, ys, error_std] = query()
 plt.scatter(xs, ys)
 plt.xlabel("year")
-# plt.errorbar(xs, ys, yerr=error_mean, xerr=error_std, fmt="", color="r") ####
+plt.errorbar(xs, ys, yerr=error_std, fmt="", color="lightblue") ####
 plt.show()  # display figure if you run this code locally
 plt.savefig("figure.png") # save figure as image in local directory
 close()
