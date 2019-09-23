@@ -40,7 +40,7 @@ class Program:
         country = input("Country code: ")
         query ="""SELECT regr_slope(population,year), regr_intercept(population,year),
         regr_r2(population,year), COUNT(population) FROM PopData
-        WHERE city LIKE '%s' AND country LIKE '%s'""" % (city, country)
+        WHERE city LIKE '%s' AND country LIKE '%s'""" % (city, country) #also needs year, population
         print("Will execute: ", query)
 
         self.cur.execute(query)
