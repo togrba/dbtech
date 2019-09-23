@@ -2,6 +2,7 @@
 import pgdb
 import matplotlib
 import matplotlib.pyplot as plt
+import numpy as np
 from sys import argv
 
 class Program:
@@ -35,9 +36,11 @@ class Program:
                 print("That was not valid, cyka.... :(")
 
     def population_query(self):
-        city = input("city_name: ")
-        country = input("country_code: ")
-        query ="SELECT * FROM popdata WHERE city LIKE '%s' AND country LIKE '%s'" % (city, country)
+        city = input("City name: ")
+        country = input("Country code: ")
+        query ="""SELECT regr_slope(population,year), regr_intercept(population,year),
+        regr_r2(population,year), COUNT(population) FROM PopData
+        WHERE city LIKE '%s' AND country LIKE '%s'""" % (city, country)
         print("Will execute: ", query)
 
         self.cur.execute(query)
@@ -46,6 +49,7 @@ class Program:
     def exit(self):
         self.cur.close()
         self.conn.close()
+        print("Buh-bye")
         exit()
 
     def print_answer(self):
@@ -64,10 +68,14 @@ class Program:
         print("-----------------------------------")
 
         plt.scatter(xs, ys)
+        (m, b) = np.polyfit(xs, ys, 1)
+        print(m, b)
+        yp = np.polyval([m, b], xs)
+        plt.plot(xs, yp)
         plt.xlabel("year")
         plt.ylabel("population")
+        plt.grid(True)
         plt.show()
-        print(xs,ys)
 
     def run(self):
         while True:
