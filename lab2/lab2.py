@@ -92,7 +92,7 @@ cursor1 = connection1.cursor()
 #
 def query():
     # Here we test some concurrency issues.
-    xy = "SELECT FLOOR(year/10)*10, AVG(population), STDDEV_POP(population) FROM popdata GROUP BY year ORDER BY year";
+    xy = "SELECT FLOOR(year/10)*10, AVG(population), STDDEV_POP(population) FROM popdata GROUP BY FLOOR(year/10)*10 ORDER BY FLOOR(year/10)*10";
     print("U1: (start) "+ xy)
     cursor1.execute(xy)
     data = cursor1.fetchall()
