@@ -54,24 +54,24 @@ class Program:
 
     def print_answer(self):
         print("-----------------------------------")
-        xs = []
-        ys = []
+        year_data = []
+        pop_data = []
         result = []
         for r in self.cur.fetchall():
             if (r[0] != None and r[0] != None):
-                xs.append(float(r[0]))
-                ys.append(float(r[1]))
+                year_data.append(float(r[0]))
+                pop_data.append(float(r[1]))
                 result.append(r)
             else:
                 print("Dropped tuple ", r)
         print("\n".join([", ".join([str(a) for a in x]) for x in result]))
         print("-----------------------------------")
 
-        plt.scatter(xs, ys)
-        (m, b) = np.polyfit(xs, ys, 1)
-        print(m, b)
-        yp = np.polyval([m, b], xs)
-        plt.plot(xs, yp)
+        plt.scatter(year_data, pop_data)
+        (m, b) = np.polyfit(year_data, pop_data, 1)
+        print("TEST", m, b)
+        yp = np.polyval([m, b], year_data)
+        plt.plot(year_data, yp)
         plt.xlabel("year")
         plt.ylabel("population")
         plt.grid(True)
