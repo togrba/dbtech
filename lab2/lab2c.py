@@ -8,7 +8,7 @@ from sys import argv
 class Program:
     def __init__(self): #PG-connection setup
         # local server:
-        params = {'host':'localhost', 'user':'postgres', 'database':'postgres', 'password':''}
+        params = {'host':'localhost', 'user':'postgres', 'database':'postgres', 'password':'Kth_derp667'}
         # kth server:
         # params = {'host':'nestor2.csc.kth.se', 'user': 'yourkthusername', 'database':'', 'password':'yournestorpassword'}
         self.conn = pgdb.Connection(**params)
@@ -33,14 +33,14 @@ class Program:
                     return choice
                 print("Invalid choice.")
             except (NameError,ValueError, TypeError,SyntaxError):
-                print("That was not valid, cyka.... :(")
+                print("That was not valid, baka.... :(")
 
     def population_query(self):
         city = input("City name: ")
         country = input("Country code: ")
-        query ="""SELECT regr_slope(population,year), regr_intercept(population,year),
+        query ="""SELECT year, population, regr_slope(population,year), regr_intercept(population,year),
         regr_r2(population,year), COUNT(population) FROM PopData
-        WHERE city LIKE '%s' AND country LIKE '%s'""" % (city, country) #also needs year, population
+        WHERE city LIKE '%s' AND country LIKE '%s' GROUP BY (year, population)""" % (city, country) #yields None when year, popul included
         print("Will execute: ", query)
 
         self.cur.execute(query)
@@ -60,7 +60,7 @@ class Program:
         for r in self.cur.fetchall():
             if (r[0] != None and r[0] != None):
                 xs.append(float(r[0]))
-                ys.append(float(r[2]))
+                ys.append(float(r[1]))
                 result.append(r)
             else:
                 print("Dropped tuple ", r)
