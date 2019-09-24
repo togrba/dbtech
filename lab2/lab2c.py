@@ -38,9 +38,10 @@ class Program:
     def population_query(self):
         city = input("City name: ")
         country = input("Country code: ")
-        query ="""SELECT year, population, regr_slope(population,year), regr_intercept(population,year),
-        regr_r2(population,year), COUNT(population) FROM PopData
-        WHERE city LIKE '%s' AND country LIKE '%s' GROUP BY (year, population)""" % (city, country) #yields None when year, popul included
+        query ="""SELECT citypops.year, citypops.population, regr_slope(popdata.population,popdata.year),
+        regr_intercept(popdata.population,popdata.year), regr_r2(popdata.population,popdata.year), COUNT(popdata.population)
+        FROM PopData, citypops WHERE popdata.city LIKE '%s' AND citypops.country LIKE '%s'
+        GROUP BY (citypops.year, citypops.population)""" % (city, country) #yields None when year, popul included
         print("Will execute: ", query)
 
         self.cur.execute(query)
