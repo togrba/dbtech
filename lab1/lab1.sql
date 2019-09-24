@@ -1,5 +1,5 @@
-psql -f mondial-schema.psql
-psql -f mondial-inputs.psql
+-- psql -f mondial-schema.psql
+-- psql -f mondial-inputs.psql
 -- Part I
 SELECT name FROM city WHERE population > 13000000;                        -- projecting the relation city onto the attribute name, and a selection of tuples under the condition of the attribute population being larger than 13M.
 SELECT code FROM country WHERE name = 'Sweden';
