@@ -10,7 +10,9 @@ cursor1 = connection1.cursor()
 
 # Q2A
 
+# PART 1 --------------------------------------------------------------------
 # Year - population
+
 # def query():
 #     # Here we test some concurrency issues.
 #     xy = "SELECT year, population FROM popdata";
@@ -33,8 +35,22 @@ cursor1 = connection1.cursor()
 #     print("xs:", xs)
 #     print("ys:", ys)
 #     return [xs, ys]
+#
+# def close():
+#     connection1.close()
+#
+# # when calling python lab2.py the following functions will be executed:
+# [xs, ys] = query()
+# plt.scatter(xs, ys)
+# plt.xlabel("year")
+# plt.show()  # display figure if you run this code locally
+# plt.savefig("figure.png") # save figure as image in local directory
+# close()
 
+
+# PART 2 --------------------------------------------------------------------
 # Number of cities - year
+
 # def query():
 #     # Here we test some concurrency issues.
 #     xy = "SELECT year, COUNT(city) FROM popdata GROUP BY year";
@@ -60,9 +76,20 @@ cursor1 = connection1.cursor()
 #
 # def close():
 #     connection1.close()
+#
+# # when calling python lab2.py the following functions will be executed:
+# [xs, ys] = query()
+# plt.scatter(xs, ys)
+# plt.xlabel("year")
+# plt.show()  # display figure if you run this code locally
+# plt.savefig("figure.png") # save figure as image in local directory
+# close()
 
+
+# PART 3 --------------------------------------------------------------------
 # Mean population - decade
 # Standard deviation - decade
+#
 def query():
     # Here we test some concurrency issues.
     xy = "SELECT FLOOR(year/10)*10, AVG(population), STDDEV_POP(population) FROM popdata GROUP BY year ORDER BY year";
@@ -91,7 +118,6 @@ def query():
 
 def close():
     connection1.close()
-
 
 # when calling python lab2.py the following functions will be executed:
 [xs, ys, error_std] = query()
