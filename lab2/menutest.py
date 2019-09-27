@@ -1,5 +1,8 @@
 #!/usr/bin/python
 import pgdb
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
 from sys import argv
 
 class Program:
