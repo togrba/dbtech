@@ -171,8 +171,8 @@ class Program:
                             data = self.cur.fetchall()
                             for r in data:
                                 if (r[0]!=None and r[0]!=None):
-                                    pop_data1.append(float(r[3]))
-                                    elv_data1.append(float(r[4]))
+                                    pop_data1.append(float(r[2]))
+                                    elv_data1.append(float(r[3]))
                                     print("\nYou chose %s, %s at elevation %s" % (chosen_city1, chosen_country1, str(elv_data1).strip("[]")))
                                     return [pop_data1, elv_data1, chosen_city1]
                                 else:
@@ -199,8 +199,8 @@ class Program:
                             data = self.cur.fetchall()
                             for r in data:
                                 if (r[0]!=None and r[0]!=None):
-                                    pop_data2.append(float(r[3]))
-                                    elv_data2.append(float(r[4]))
+                                    pop_data2.append(float(r[2]))
+                                    elv_data2.append(float(r[3]))
                                     print("\nYou chose %s, %s at elevation %s" % (chosen_city2, chosen_country2, str(elv_data2).strip("[]")))
                                     return [pop_data2, elv_data2, chosen_city2]
                                 else:
@@ -267,7 +267,7 @@ class Program:
                             print("\nPlotting data...\n")
                             self.print_lat_plot(pop_data1, lat_data1, pop_data2, lat_data2, chosen_city1, chosen_city2)
                             self.run()
-                    print("Invalid choice. Choose a latitude between -90 and 4330")
+                    print("Invalid choice. Choose a latitude between -90 and 90")
                 else:
                     maxlat = int(input("Maximum latitude: "))
                     if -90 <= maxlat <= 90:
@@ -317,8 +317,8 @@ class Program:
                             data = self.cur.fetchall()
                             for r in data:
                                 if (r[0]!=None and r[0]!=None):
-                                    pop_data1.append(float(r[3]))
-                                    lat_data1.append(float(r[4]))
+                                    pop_data1.append(float(r[2]))
+                                    lat_data1.append(float(r[3]))
                                     print("\nYou chose %s, %s at latitude %s" % (chosen_city1, chosen_country1, str(lat_data1).strip("[]")))
                                     return [pop_data1, lat_data1, chosen_city1]
                                 else:
@@ -345,8 +345,8 @@ class Program:
                             data = self.cur.fetchall()
                             for r in data:
                                 if (r[0]!=None and r[0]!=None):
-                                    pop_data2.append(float(r[3]))
-                                    lat_data2.append(float(r[4]))
+                                    pop_data2.append(float(r[2]))
+                                    lat_data2.append(float(r[3]))
                                     print("\nYou chose %s, %s at latitude %s" % (chosen_city2, chosen_country2, str(lat_data2).strip("[]")))
                                     return [pop_data2, lat_data2, chosen_city2]
                                 else:
