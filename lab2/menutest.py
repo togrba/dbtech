@@ -85,7 +85,7 @@ class Program:
                     if -28 <= minelv <= 4330:
                         maxelv = int(input("Choose the maximum elevation for a city to explore: "))
                         if -28 <= maxelv <= 4330:
-                            query = "SELECT name, country, elevation FROM city WHERE elevation >=%s AND elevation <= %s ORDER BY elevation" % (minelv, maxelv)
+                            query = "SELECT name, country, elevation FROM city WHERE elevation >=%s AND elevation <=%s ORDER BY elevation" % (minelv, maxelv)
                             self.cur.execute(query)
                             self.print_elevation_options()
                             [pop_data1, elv_data1, chosen_city1] = self.choose_city1_elevation()
@@ -95,7 +95,7 @@ class Program:
                 else:
                     maxelv = int(input("Choose the maximum elevation for a city to explore: "))
                     if -28 <= maxelv <= 4330:
-                        query = "SELECT name, country, elevation FROM city WHERE elevation >=%s AND elevation <= %s ORDER BY elevation" % (minelv, maxelv)
+                        query = "SELECT name, country, elevation FROM city WHERE elevation >=%s AND elevation <=%s ORDER BY elevation" % (minelv, maxelv)
                         self.cur.execute(query)
                         self.print_elevation_options()
                         [pop_data1, elv_data1, chosen_city1] = self.choose_city1_elevation()
@@ -114,7 +114,7 @@ class Program:
                     if -28 <= minelv <= 4330:
                         maxelv = int(input("Maximum elevation: "))
                         if -28 <= maxelv <= 4330:
-                            query = "SELECT name, country, elevation FROM city WHERE elevation >=%s AND elevation <= %s ORDER BY elevation" % (minelv, maxelv)
+                            query = "SELECT name, country, elevation FROM city WHERE elevation >=%s AND elevation <=%s ORDER BY elevation" % (minelv, maxelv)
                             self.cur.execute(query)
                             self.print_elevation_options()
                             [pop_data2, elv_data2, chosen_city2] = self.choose_city2_elevation(chosen_city1)
@@ -125,7 +125,7 @@ class Program:
                 else:
                     maxelv = int(input("Maximum elevation: "))
                     if -28 <= maxelv <= 4330:
-                        query = "SELECT name, country, elevation FROM city WHERE elevation >=%s AND elevation <= %s ORDER BY elevation" % (minelv, maxelv)
+                        query = "SELECT name, country, elevation FROM city WHERE elevation >=%s AND elevation <=%s ORDER BY elevation" % (minelv, maxelv)
                         self.cur.execute(query)
                         self.print_elevation_options()
                         [pop_data2, elv_data2, chosen_city2] = self.choose_city2_elevation(chosen_city1)
@@ -137,21 +137,25 @@ class Program:
                 print("That was not a number...")
 
     def print_elevation_options(self):
-        print("-----------------------------------")
         city_data = []
         country_data = []
         elevation_data = []
         result = []
-        for r in self.cur.fetchall():
-            if (r[0] != None and r[0] != None):
-                city_data.append(r[0])
-                country_data.append(r[1])
-                elevation_data.append(float(r[2]))
-                result.append(r)
-            else:
-                print("ERR", r)
-        print("\n".join([", ".join([str(a) for a in x]) for x in result]))
-        print("-----------------------------------")
+        if len(result) != 0:
+            print("-----------------------------------")
+            for r in self.cur.fetchall():
+                if (r[0] != None and r[0] != None):
+                    city_data.append(r[0])
+                    country_data.append(r[1])
+                    elevation_data.append(float(r[2]))
+                    result.append(r)
+                else:
+                    print("ERR", r)
+            print("\n".join([", ".join([str(a) for a in x]) for x in result]))
+            print("-----------------------------------")
+        else:
+            print("Oups, no cities within the given elevation")
+            self.elevation_program()
 
     def choose_city1_elevation(self):
         pop_data1 = []
@@ -229,7 +233,7 @@ class Program:
                     if -90 <= minlat <= 90:
                         maxlat = int(input("Choose the maximum latitude for a city to explore: "))
                         if -90 <= maxlat <= 90:
-                            query = "SELECT name, country, latitude FROM city WHERE latitude >=%s AND latitude <= %s ORDER BY latitude" % (minlat, maxlat)
+                            query = "SELECT name, country, latitude FROM city WHERE latitude >=%s AND latitude <=%s ORDER BY latitude" % (minlat, maxlat)
                             self.cur.execute(query)
                             self.print_latitude_options()
                             [pop_data1, lat_data1, chosen_city1] = self.choose_city1_latitude()
@@ -239,7 +243,7 @@ class Program:
                 else:
                     maxlat = int(input("Choose the maximum latitude for a city to explore: "))
                     if -90 <= maxlat <= 90:
-                        query = "SELECT name, country, latitude FROM city WHERE latitude >=%s AND latitude <= %s ORDER BY latitude" % (minlat, maxlat)
+                        query = "SELECT name, country, latitude FROM city WHERE latitude >=%s AND latitude <=%s ORDER BY latitude" % (minlat, maxlat)
                         self.cur.execute(query)
                         self.print_latitude_options()
                         [pop_data1, lat_data1, chosen_city1] = self.choose_city1_latitude()
