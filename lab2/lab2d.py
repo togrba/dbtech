@@ -317,6 +317,8 @@ class Program:
                             data = self.cur.fetchall()
                             for r in data:
                                 if (r[0]!=None and r[0]!=None):
+                                    if r[2] == None:
+                                        print("Population info missing.")
                                     pop_data1.append(float(r[2]))
                                     lat_data1.append(float(r[3]))
                                     print("\nYou chose %s, %s at latitude %s" % (chosen_city1, chosen_country1, str(lat_data1).strip("[]")))
