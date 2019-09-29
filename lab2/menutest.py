@@ -80,28 +80,28 @@ class Program:
         minelv = 0
         while True:
             try:
-                if minelv == 0 or minelv < -28 or minelv > 4330:
+                if minelv == 0 or minelv < -30 or minelv > 4330:
                     minelv = int(input("\nChoose the minimum elevation for a city to explore: "))
-                    if -28 <= minelv <= 4330:
+                    if -30 <= minelv <= 4330:
                         maxelv = int(input("Choose the maximum elevation for a city to explore: "))
-                        if -28 <= maxelv <= 4330:
+                        if -30 <= maxelv <= 4330:
                             query = "SELECT name, country, elevation FROM city WHERE elevation >=%s AND elevation <=%s ORDER BY elevation" % (minelv, maxelv)
                             self.cur.execute(query)
                             self.print_elevation_options()
                             [pop_data1, elv_data1, chosen_city1] = self.choose_city1_elevation()
                             print("\nNow find a second city with")
                             self.elevation_program_next(pop_data1, elv_data1, chosen_city1)
-                    print("Invalid choice. Choose an elevation between -28 and 4330")
+                    print("Invalid choice. Choose an elevation between -30 and 4330")
                 else:
                     maxelv = int(input("Choose the maximum elevation for a city to explore: "))
-                    if -28 <= maxelv <= 4330:
+                    if -30 <= maxelv <= 4330:
                         query = "SELECT name, country, elevation FROM city WHERE elevation >=%s AND elevation <=%s ORDER BY elevation" % (minelv, maxelv)
                         self.cur.execute(query)
                         self.print_elevation_options()
                         [pop_data1, elv_data1, chosen_city1] = self.choose_city1_elevation()
                         print("\nNow find a second city with")
                         self.elevation_program_next(pop_data1, elv_data1, chosen_city1)
-                    print("Invalid choice. Choose an elevation between -28 and 4330")
+                    print("Invalid choice. Choose an elevation between -30 and 4330")
             except (NameError, ValueError, TypeError, SyntaxError):
                 print("That was not a number...")
 
@@ -109,11 +109,11 @@ class Program:
         minelv = 0
         while True:
             try:
-                if minelv == 0 or minelv < -28 or minelv > 4330:
+                if minelv == 0 or minelv < -30 or minelv > 4330:
                     minelv = int(input("Minimum elevation: "))
-                    if -28 <= minelv <= 4330:
+                    if -30 <= minelv <= 4330:
                         maxelv = int(input("Maximum elevation: "))
-                        if -28 <= maxelv <= 4330:
+                        if -30 <= maxelv <= 4330:
                             query = "SELECT name, country, elevation FROM city WHERE elevation >=%s AND elevation <=%s ORDER BY elevation" % (minelv, maxelv)
                             self.cur.execute(query)
                             self.print_elevation_options()
@@ -121,10 +121,10 @@ class Program:
                             print("\nPlotting data...\n")
                             self.print_elv_plot(pop_data1, elv_data1, pop_data2, elv_data2, chosen_city1, chosen_city2)
                             self.run()
-                    print("Invalid choice. Choose an elevation between -28 and 4330")
+                    print("Invalid choice. Choose an elevation between -30 and 4330")
                 else:
                     maxelv = int(input("Maximum elevation: "))
-                    if -28 <= maxelv <= 4330:
+                    if -30 <= maxelv <= 4330:
                         query = "SELECT name, country, elevation FROM city WHERE elevation >=%s AND elevation <=%s ORDER BY elevation" % (minelv, maxelv)
                         self.cur.execute(query)
                         self.print_elevation_options()
@@ -132,7 +132,7 @@ class Program:
                         print("\nPlotting data...\n")
                         self.print_elv_plot(pop_data1, elv_data1, pop_data2, elv_data2, chosen_city1, chosen_city2)
                         self.run()
-                    print("Invalid choice. Choose an elevation between -28 and 4330")
+                    print("Invalid choice. Choose an elevation between -30 and 4330")
             except (NameError, ValueError, TypeError, SyntaxError):
                 print("That was not a number...")
 
