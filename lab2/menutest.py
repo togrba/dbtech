@@ -63,64 +63,78 @@ class Program:
         while True:
             try:
                 self.actions[self.print_menu()-1]()
-                #self.actions[self.print_explore_menu()-1]()
             except IndexError:
                 print("Bad choice")
                 continue
 
     def population_query(self):
         print("\nExplore population by:")
-        print("TEST", self.print_explore_menu())
         if self.print_explore_menu() == 1:
             self.latitude_program()
-            # return or continue?
-        if self.print_explore_menu() == 2:
-            self.elevation_program()
-            # return or continue?
         else:
-            print("OPSI, fix error sutff")
-
-        # while True:
-        #     try:
-
-        #         factors = int(input("Choose: "))
-        #         if 1 <= choice <= len(self.explore_menu):
-        #             return choice
-        #         print("Invalid choice.")
-        #     except (NameError,ValueError, TypeError,SyntaxError):
-        #         print("That was not a number...")
-
-        # def population_query(self):
-        #     print("\nExplore population by:")
-        #     while True:
-        #         try:
-        #             factors = int(input("1. Latitude\n2. Elevation\nChoose: "))
-        #             if factors == 1:
-        #                 self.latitude_program()
-        #             if factors == 2:
-        #                 self.elevation_program()
-        #         except ValueError:
-        #             print("Please choose between the given options, 1 or 2")
-        #             return
+            self.elevation_program()
 
     '''Elevation functions'''
 
     def elevation_program(self):
-        minelv = input("\nChoose the minimum elevation for a city to explore: ")
-        maxelv = input("Choose the maximum elevation for a city to explore: ")
-        query ="SELECT name, country, elevation FROM city WHERE elevation >=%s AND elevation <= %s ORDER BY elevation" % (minelv, maxelv)
-        self.cur.execute(query)
-        self.print_elevation_options()
-        [pop_data1, elv_data1, chosen_city1] = self.choose_city1_elevation()
-        print("\nNow find a second city with")
-        minelv = input("Minimum elevation: ")
-        maxelv = input("Maximum elevation: ")
-        query ="SELECT name, country, latitude FROM city WHERE latitude >=%s AND latitude <= %s ORDER BY latitude" % (minelv, maxelv)
-        self.cur.execute(query)
-        self.print_elevation_options()
-        [pop_data2, elv_data2, chosen_city2] = self.choose_city2_elevation(chosen_city1)
-        print("\nPlotting data...\n")
-        self.print_elv_plot(pop_data1, elv_data1, pop_data2, elv_data2, chosen_city1, chosen_city2)
+        minelv = 0
+        while True:
+            try:
+                if minelv == 0 or minelv < -28 or minelv > 4330:
+                    minelv = int(input("\nChoose the minimum elevation for a city to explore: "))
+                    if -28 <= minelv <= 4330:
+                        maxelv = int(input("Choose the maximum elevation for a city to explore: "))
+                        if -28 <= maxelv <= 4330:
+                            query = "SELECT name, country, elevation FROM city WHERE elevation >=%s AND elevation <= %s ORDER BY elevation" % (minelv, maxelv)
+                            self.cur.execute(query)
+                            self.print_elevation_options()
+                            [pop_data1, elv_data1, chosen_city1] = self.choose_city1_elevation()
+                            print("\nNow find a second city with")
+                            self.elevation_program_next(pop_data1, elv_data1, chosen_city1)
+                    print("Invalid choice. Choose an elevation between -28 and 4330")
+                else:
+                    maxelv = int(input("Choose the maximum elevation for a city to explore: "))
+                    if -28 <= maxelv <= 4330:
+                        query = "SELECT name, country, elevation FROM city WHERE elevation >=%s AND elevation <= %s ORDER BY elevation" % (minelv, maxelv)
+                        self.cur.execute(query)
+                        self.print_elevation_options()
+                        [pop_data1, elv_data1, chosen_city1] = self.choose_city1_elevation()
+                        print("\nNow find a second city with")
+                        self.elevation_program_next(pop_data1, elv_data1, chosen_city1)
+                    print("Invalid choice. Choose an elevation between -28 and 4330")
+            except (NameError, ValueError, TypeError, SyntaxError):
+                print("That was not a number...")
+
+    def elevation_program_next(self, pop_data1, elv_data1, chosen_city1):
+        minelv = 0
+        while True:
+            try:
+                if minelv == 0 or minelv < -28 or minelv > 4330:
+                    minelv = int(input("Minimum elevation: "))
+                    if -28 <= minelv <= 4330:
+                        maxelv = int(input("Maximum elevation: "))
+                        if -28 <= maxelv <= 4330:
+                            query = "SELECT name, country, elevation FROM city WHERE elevation >=%s AND elevation <= %s ORDER BY elevation" % (minelv, maxelv)
+                            self.cur.execute(query)
+                            self.print_elevation_options()
+                            [pop_data2, elv_data2, chosen_city2] = self.choose_city2_elevation(chosen_city1)
+                            print("\nPlotting data...\n")
+                            self.print_elv_plot(pop_data1, elv_data1, pop_data2, elv_data2, chosen_city1, chosen_city2)
+                            self.run()
+                    print("Invalid choice. Choose an elevation between -28 and 4330")
+                else:
+                    maxelv = int(input("Maximum elevation: "))
+                    if -28 <= maxelv <= 4330:
+                        query = "SELECT name, country, elevation FROM city WHERE elevation >=%s AND elevation <= %s ORDER BY elevation" % (minelv, maxelv)
+                        self.cur.execute(query)
+                        self.print_elevation_options()
+                        [pop_data2, elv_data2, chosen_city2] = self.choose_city2_elevation(chosen_city1)
+                        print("\nPlotting data...\n")
+                        self.print_elv_plot(pop_data1, elv_data1, pop_data2, elv_data2, chosen_city1, chosen_city2)
+                        self.run()
+                    print("Invalid choice. Choose an elevation between -28 and 4330")
+            except (NameError, ValueError, TypeError, SyntaxError):
+                print("That was not a number...")
 
     def print_elevation_options(self):
         print("-----------------------------------")
@@ -142,44 +156,58 @@ class Program:
     def choose_city1_elevation(self):
         pop_data1 = []
         elv_data1 = []
-        print("\nNow pick one of these cities to compare to another")                # ERROR HANDLIN
-        if len(pop_data1) == 0:
-            chosen_city1 = input("Type the name of the city: ")
-            chosen_country1 = input("Type the country code for %s: " % chosen_city1)
-            query = "SELECT city, country, year, population, elevation FROM popdata WHERE city LIKE '%s' AND country LIKE '%s'" % (chosen_city1, chosen_country1)
-            self.cur.execute(query)
-            data = self.cur.fetchall()
-            for r in data:
-                if (r[0]!=None and r[0]!=None):
-                    pop_data1.append(float(r[3]))
-                    elv_data1.append(float(r[4]))
-                    print("\nYou chose %s, %s at elevation %s" % (chosen_city1, chosen_country1, elv_data1))  # elevation TO STRINg??
-                    return [pop_data1, elv_data1, chosen_city1]
-                else:
-                    print("Dropped tuple ", r)
-        else:           # NOT IN USE
-            [pop_data2, elv_data2] = self.choose_city2_elevation(chosen_city1)
+        print("\nNow pick one of these cities to compare to another")
+        while True:
+            try:
+                if len(pop_data1) == 0:
+                    chosen_city1 = input("Type the name of the city: ")
+                    if len(chosen_city1) != 0:
+                        chosen_country1 = input("Type the country code for %s: " % chosen_city1)
+                        if len(chosen_country1) != 0:
+                            query = "SELECT city, country, year, population, elevation FROM popdata WHERE city LIKE '%s' AND country LIKE '%s'" % (chosen_city1, chosen_country1)
+                            self.cur.execute(query)
+                            data = self.cur.fetchall()
+                            for r in data:
+                                if (r[0]!=None and r[0]!=None):
+                                    pop_data1.append(float(r[3]))
+                                    elv_data1.append(float(r[4]))
+                                    print("\nYou chose %s, %s at elevation %s" % (chosen_city1, chosen_country1, str(elv_data1).strip("[]")))
+                                    return [pop_data1, elv_data1, chosen_city1]
+                                else:
+                                    print("Dropped tuple ", r)
+                    print("Hmm. Unknown city.")
+                else:           # NOT IN USE
+                    [pop_data2, elv_data2] = self.choose_city2_elevation(chosen_city1)
+            except (NameError, ValueError, TypeError, SyntaxError):
+                print("Hmm. Unknown city.")
 
     def choose_city2_elevation(self, chosen_city1):
         pop_data2 = []
         elv_data2 = []
         print("\nNow pick one of these cities to compare to %s" % (chosen_city1))
-        chosen_city2 = input("\nType the name of the city: ")
-        chosen_country2 = input("Type the country code for %s: " % chosen_city2)
-        if len(pop_data2) == 0:
-            query = "SELECT city, country, year, population, elevation FROM popdata WHERE city LIKE '%s' AND country LIKE '%s'" % (chosen_city2, chosen_country2)
-            self.cur.execute(query)
-            data = self.cur.fetchall()
-            for r in data:
-                if (r[0]!=None and r[0]!=None):
-                    pop_data2.append(float(r[3]))
-                    elv_data2.append(float(r[4]))
-                    print("\nYou chose %s, %s at elevation %s" % (chosen_city2, chosen_country2, elv_data2))     # elv TO STRINg??
-                    return [pop_data2, elv_data2, chosen_city2]
+        while True:
+            try:
+                if len(pop_data2) == 0:
+                    chosen_city2 = input("\nType the name of the city: ")
+                    if len(chosen_city2) != 0:
+                        chosen_country2 = input("Type the country code for %s: " % chosen_city2)
+                        if len(chosen_country2) != 0:
+                            query = "SELECT city, country, year, population, elevation FROM popdata WHERE city LIKE '%s' AND country LIKE '%s'" % (chosen_city2, chosen_country2)
+                            self.cur.execute(query)
+                            data = self.cur.fetchall()
+                            for r in data:
+                                if (r[0]!=None and r[0]!=None):
+                                    pop_data2.append(float(r[3]))
+                                    elv_data2.append(float(r[4]))
+                                    print("\nYou chose %s, %s at elevation %s" % (chosen_city2, chosen_country2, str(elv_data2).strip("[]")))
+                                    return [pop_data2, elv_data2, chosen_city2]
+                                else:
+                                    print("Dropped tuple ", r)
+                    print("Hmm. Unknown city.")
                 else:
-                    print("Dropped tuple ", r)
-        else:
-            print("OJ something went wrong. FIX ERROr")
+                    print("OJ something went wrong. FIX ERROr")
+            except (NameError, ValueError, TypeError, SyntaxError):
+                print("Hmm. Unknown city.")
 
     def print_elv_plot(self, pop_data1, elv_data1, pop_data2, elv_data2, chosen_city1, chosen_city2):
         plt.scatter(elv_data1, pop_data1, label=chosen_city1)
@@ -208,6 +236,7 @@ class Program:
         [pop_data2, lat_data2, chosen_city2] = self.choose_city2_latitude(chosen_city1)
         print("\nPlotting data...\n")
         self.print_lat_plot(pop_data1, lat_data1, pop_data2, lat_data2, chosen_city1, chosen_city2)
+        self.run()
 
     def print_latitude_options(self):
         print("-----------------------------------")
