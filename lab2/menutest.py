@@ -143,7 +143,7 @@ class Program:
         elevation_data = []
         result = []
         for r in self.cur.fetchall():
-            if (r[0] != None and r[0] != None):                 # ADD ERROR HANDLIN
+            if (r[0] != None and r[0] != None):
                 city_data.append(r[0])
                 country_data.append(r[1])
                 elevation_data.append(float(r[2]))
@@ -176,7 +176,7 @@ class Program:
                                 else:
                                     print("Dropped tuple ", r)
                     print("Hmm. Unknown city.")
-                else:           # NOT IN USE
+                else:
                     [pop_data2, elv_data2] = self.choose_city2_elevation(chosen_city1)
             except (NameError, ValueError, TypeError, SyntaxError):
                 print("Hmm. Unknown city.")
@@ -204,8 +204,8 @@ class Program:
                                 else:
                                     print("Dropped tuple ", r)
                     print("Hmm. Unknown city.")
-                else:
-                    print("OJ something went wrong. FIX ERROr")
+                # else:
+                #     print("OJ something went wrong. FIX ERROr")
             except (NameError, ValueError, TypeError, SyntaxError):
                 print("Hmm. Unknown city.")
 
@@ -220,23 +220,65 @@ class Program:
 
     '''Latitude functions'''
 
-    def latitude_program(self):             # VERY UglY
-        minlat = input("\nChoose the minimum latitude (-90 <= latitude => 90) for a city to explore: ")
-        maxlat = input("Choose the maximum latitude for a city to explore: ")
-        query ="SELECT name, country, latitude FROM city WHERE latitude >=%s AND latitude <= %s ORDER BY latitude" % (minlat, maxlat)
-        self.cur.execute(query)
-        self.print_latitude_options()
-        [pop_data1, lat_data1, chosen_city1] = self.choose_city1_latitude()
-        print("\nNow find a second city with")
-        minlat = input("Minimum latitude: ")
-        maxlat = input("Maximum latitude: ")
-        query ="SELECT name, country, latitude FROM city WHERE latitude >=%s AND latitude <= %s ORDER BY latitude" % (minlat, maxlat)
-        self.cur.execute(query)
-        self.print_latitude_options()
-        [pop_data2, lat_data2, chosen_city2] = self.choose_city2_latitude(chosen_city1)
-        print("\nPlotting data...\n")
-        self.print_lat_plot(pop_data1, lat_data1, pop_data2, lat_data2, chosen_city1, chosen_city2)
-        self.run()
+    def latitude_program(self):
+        minlat = 0
+        while True:
+            try:
+                if minlat == 0 or minlat < -90 or minlat > 90:
+                    minlat = int(input("\nChoose the minimum latitude for a city to explore: "))
+                    if -90 <= minlat <= 90:
+                        maxlat = int(input("Choose the maximum latitude for a city to explore: "))
+                        if -90 <= maxlat <= 90:
+                            query = "SELECT name, country, latitude FROM city WHERE latitude >=%s AND latitude <= %s ORDER BY latitude" % (minlat, maxlat)
+                            self.cur.execute(query)
+                            self.print_latitude_options()
+                            [pop_data1, lat_data1, chosen_city1] = self.choose_city1_latitude()
+                            print("\nNow find a second city with")
+                            self.latitude_program_next(pop_data1, lat_data1, chosen_city1)
+                    print("Invalid choice. Choose a latitude between -90 and 90")
+                else:
+                    maxlat = int(input("Choose the maximum latitude for a city to explore: "))
+                    if -90 <= maxlat <= 90:
+                        query = "SELECT name, country, latitude FROM city WHERE latitude >=%s AND latitude <= %s ORDER BY latitude" % (minlat, maxlat)
+                        self.cur.execute(query)
+                        self.print_latitude_options()
+                        [pop_data1, lat_data1, chosen_city1] = self.choose_city1_latitude()
+                        print("\nNow find a second city with")
+                        self.latitude_program_next(pop_data1, lat_data1, chosen_city1)
+                    print("Invalid choice. Choose a latitude between -90 and 90")
+            except (NameError, ValueError, TypeError, SyntaxError):
+                print("That was not a number...")
+
+    def latitude_program_next(self, pop_data1, lat_data1, chosen_city1):
+        minlat = 0
+        while True:
+            try:
+                if minlat == 0 or minlat < -90 or minlat > 90:
+                    minlat = int(input("Minimum latitude: "))
+                    if -90 <= minlat <= 90:
+                        maxlat = int(input("Maximum latitude: "))
+                        if -90 <= maxlat <= 90:
+                            query = "SELECT name, country, latitude FROM city WHERE latitude >=%s AND latitude <= %s ORDER BY latitude" % (minlat, maxlat)
+                            self.cur.execute(query)
+                            self.print_latitude_options()
+                            [pop_data2, lat_data2, chosen_city2] = self.choose_city2_latitude(chosen_city1)
+                            print("\nPlotting data...\n")
+                            self.print_lat_plot(pop_data1, lat_data1, pop_data2, lat_data2, chosen_city1, chosen_city2)
+                            self.run()
+                    print("Invalid choice. Choose a latitude between -90 and 4330")
+                else:
+                    maxlat = int(input("Maximum latitude: "))
+                    if -90 <= maxlat <= 90:
+                        query = "SELECT name, country, latitude FROM city WHERE latitude >=%s AND latitude <= %s ORDER BY latitude" % (minlat, maxelv)
+                        self.cur.execute(query)
+                        self.print_latitude_options()
+                        [pop_data2, lat_data2, chosen_city2] = self.choose_city2_latitude(chosen_city1)
+                        print("\nPlotting data...\n")
+                        self.print_lat_plot(pop_data1, lat_data1, pop_data2, lat_data2, chosen_city1, chosen_city2)
+                        self.run()
+                    print("Invalid choice. Choose a latitude between -90 and 90")
+            except (NameError, ValueError, TypeError, SyntaxError):
+                print("That was not a number...")
 
     def print_latitude_options(self):
         print("-----------------------------------")
@@ -245,7 +287,7 @@ class Program:
         latitude_data = []
         result = []
         for r in self.cur.fetchall():
-            if (r[0] != None and r[0] != None):                 # ADD ERROR HANDLIN
+            if (r[0] != None and r[0] != None):
                 city_data.append(r[0])
                 country_data.append(r[1])
                 latitude_data.append(float(r[2]))
@@ -258,44 +300,58 @@ class Program:
     def choose_city1_latitude(self):
         pop_data1 = []
         lat_data1 = []
-        print("\nNow pick one of these cities to compare to another")                # ERROR HANDLIN
-        if len(pop_data1) == 0:
-            chosen_city1 = input("Type the name of the city: ")
-            chosen_country1 = input("Type the country code for %s: " % chosen_city1)
-            query = "SELECT city, country, year, population, latitude FROM popdata WHERE city LIKE '%s' AND country LIKE '%s'" % (chosen_city1, chosen_country1)
-            self.cur.execute(query)
-            data = self.cur.fetchall()
-            for r in data:
-                if (r[0]!=None and r[0]!=None):
-                    pop_data1.append(float(r[3]))
-                    lat_data1.append(float(r[4]))
-                    print("\nYou chose %s, %s at latitude %s" % (chosen_city1, chosen_country1, lat_data1))  # LATITUDE TO STRIN??
-                    return [pop_data1, lat_data1, chosen_city1]
+        print("\nNow pick one of these cities to compare to another")
+        while True:
+            try:
+                if len(pop_data1) == 0:
+                    chosen_city1 = input("Type the name of the city: ")
+                    if len(chosen_city1) != 0:
+                        chosen_country1 = input("Type the country code for %s: " % chosen_city1)
+                        if len(chosen_country1) != 0:
+                            query = "SELECT city, country, year, population, latitude FROM popdata WHERE city LIKE '%s' AND country LIKE '%s'" % (chosen_city1, chosen_country1)
+                            self.cur.execute(query)
+                            data = self.cur.fetchall()
+                            for r in data:
+                                if (r[0]!=None and r[0]!=None):
+                                    pop_data1.append(float(r[3]))
+                                    lat_data1.append(float(r[4]))
+                                    print("\nYou chose %s, %s at latitude %s" % (chosen_city1, chosen_country1, str(lat_data1).strip("[]")))
+                                    return [pop_data1, lat_data1, chosen_city1]
+                                else:
+                                    print("Dropped tuple ", r)
+                    print("Hmm. Unknown city.")
                 else:
-                    print("Dropped tuple ", r)
-        else:           # NOT IN USE
-            [pop_data2, lat_data2] = self.choose_city2_latitude(chosen_city1)
+                    [pop_data2, lat_data2] = self.choose_city2_latitude(chosen_city1)
+            except (NameError, ValueError, TypeError, SyntaxError):
+                print("Hmm. Unknown city.")
 
     def choose_city2_latitude(self, chosen_city1):
         pop_data2 = []
         lat_data2 = []
         print("\nNow pick one of these cities to compare to %s" % (chosen_city1))
-        chosen_city2 = input("\nType the name of the city: ")
-        chosen_country2 = input("Type the country code for %s: " % chosen_city2)
-        if len(pop_data2) == 0:
-            query = "SELECT city, country, year, population, latitude FROM popdata WHERE city LIKE '%s' AND country LIKE '%s'" % (chosen_city2, chosen_country2)
-            self.cur.execute(query)
-            data = self.cur.fetchall()
-            for r in data:
-                if (r[0]!=None and r[0]!=None):
-                    pop_data2.append(float(r[3]))
-                    lat_data2.append(float(r[4]))
-                    print("\nYou chose %s, %s at latitude %s" % (chosen_city2, chosen_country2, lat_data2))     # LATITUDE TO STRIN??
-                    return [pop_data2, lat_data2, chosen_city2]
-                else:
-                    print("Dropped tuple ", r)
-        else:
-            print("OJ something went wrong. FIX ERROr")
+        while True:
+            try:
+                if len(pop_data2) == 0:
+                    chosen_city2 = input("\nType the name of the city: ")
+                    if len(chosen_city2) != 0:
+                        chosen_country2 = input("Type the country code for %s: " % chosen_city2)
+                        if len(chosen_country2) != 0:
+                            query = "SELECT city, country, year, population, latitude FROM popdata WHERE city LIKE '%s' AND country LIKE '%s'" % (chosen_city2, chosen_country2)
+                            self.cur.execute(query)
+                            data = self.cur.fetchall()
+                            for r in data:
+                                if (r[0]!=None and r[0]!=None):
+                                    pop_data2.append(float(r[3]))
+                                    lat_data2.append(float(r[4]))
+                                    print("\nYou chose %s, %s at latitude %s" % (chosen_city2, chosen_country2, str(lat_data2).strip("[]")))
+                                    return [pop_data2, lat_data2, chosen_city2]
+                                else:
+                                    print("Dropped tuple ", r)
+                    print("Hmm. Unknown city.")
+                # else:
+                #     print("OJ something went wrong. FIX ERROr")
+            except (NameError, ValueError, TypeError, SyntaxError):
+                print("Hmm. Unknown city.")
 
     def print_lat_plot(self, pop_data1, lat_data1, pop_data2, lat_data2, chosen_city1, chosen_city2):
         plt.scatter(lat_data1, pop_data1, label=chosen_city1)
