@@ -141,20 +141,18 @@ class Program:
         country_data = []
         elevation_data = []
         result = []
-        if len(result) != 0:
+        data = self.cur.fetchall()
+        if len(data) != 0:
+            for r in data:
+                city_data.append(r[0])
+                country_data.append(r[1])
+                elevation_data.append(float(r[2]))
+                result.append(r)
             print("-----------------------------------")
-            for r in self.cur.fetchall():
-                if (r[0] != None and r[0] != None):
-                    city_data.append(r[0])
-                    country_data.append(r[1])
-                    elevation_data.append(float(r[2]))
-                    result.append(r)
-                else:
-                    print("ERR", r)
             print("\n".join([", ".join([str(a) for a in x]) for x in result]))
             print("-----------------------------------")
         else:
-            print("Oups, no cities within the given elevation")
+            print("Oups, no cities within the given latitude")
             self.elevation_program()
 
     def choose_city1_elevation(self):
@@ -289,17 +287,14 @@ class Program:
         country_data = []
         latitude_data = []
         result = []
-        if len(result) != 0:
+        data = self.cur.fetchall()
+        if len(data) != 0:
+            for r in data:
+                city_data.append(r[0])
+                country_data.append(r[1])
+                latitude_data.append(float(r[2]))
+                result.append(r)
             print("-----------------------------------")
-            for r in self.cur.fetchall():
-                print(r)
-                if (r[0] != None and r[0] != None):
-                    city_data.append(r[0])
-                    country_data.append(r[1])
-                    latitude_data.append(float(r[2]))
-                    result.append(r)
-                else:
-                    print("ERR", r)
             print("\n".join([", ".join([str(a) for a in x]) for x in result]))
             print("-----------------------------------")
         else:
