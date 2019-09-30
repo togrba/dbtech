@@ -40,8 +40,10 @@ class Demo_program:
         # this commits all executed queries forming a transaction up to this point
         self.connection1.commit()
 
-    def scenario1(self):
+    def scenario0(self):
         # Here we test some concurrency issues.
+        print("----------------------------------------------------------------------------------------------------------")
+        print("EXAMPLE transactions.py\n")
 
         tr1 = "BEGIN TRANSACTION"
         q_max = "select MAX(price) from Sales";
@@ -74,6 +76,55 @@ class Demo_program:
         print("... min > max as highlighted in lecture notes")
         self.connection1.commit()
 
+    def scenario1(self):
+        print("----------------------------------------------------------------------------------------------------------")
+        print("DEMO: A phantom tuple that occurs in Repeatable Read and then disappears when we switch to Serializable.\n")
+
+        #tr1 = "BEGIN TRANSACTION;"
+        tr1 = "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;"
+        q_sel = "SELECT * FROM Sales;"
+        tr2 = "BEGIN TRANSACTION;"
+        q_ins = "INSERT INTO Sales VALUES('Kool Chair', 3000);"
+        com = "COMMIT;"     # repeatable read
+
+        print("U1: (start) " + tr1)
+        self.cursor1.execute(tr1)
+        print("U1: (get table) ", q_sel)
+        self.cursor1.execute(q_sel)
+        # result of fetchone is a tuple with 1 attribute, we access first component value with [0]
+        user_table = self.cursor1.fetchone()
+        print("... table = " + str(user_table))
+
+        print("U2: (start): ", tr2)
+        self.cursor2.execute(tr2)
+        print("U2: (insert): ", q_ins)
+        self.cursor2.execute(q_ins)
+        print("U2: (commit): ", com)
+        self.cursor2.execute(com)
+        # self.connection2.commit()
+
+        print("U1: (get all): ", q_sel)
+        self.cursor1.execute(q_sel)
+        user_table = self.cursor1.fetchone()
+        print("... table = ", str(user_table))
+
+        print("U1: (commit): ", com)
+        self.cursor1.execute(com)
+        # self.connection1.commit()
+
+    def scenario2(self):
+        print("----------------------------------------------------------------------------------------------------------")
+        print("DEMO: How non-repeatable reads can affect the outcome of a query in Read Commited vs Repeatable Read.\n")
+
+    def scenario3(self):
+        print("----------------------------------------------------------------------------------------------------------")
+        print("DEMO: How a transaction with two insert statements of which the second fails can be rolled back without affecting another user’s queries.\n")
+
+    def scenario4(self):
+        print("----------------------------------------------------------------------------------------------------------")
+        print("DEMO: Note that dirty reads do actually not occur in PostgreSQL as READ UNCOMMITTED is not implemented, but could appear in other SQL DBMS.\n")
+
+
     def showall(self):
         self.cursor1.execute("SELECT * FROM Sales;");
         self.connection1.commit()
@@ -90,8 +141,6 @@ class Demo_program:
         self.connection2.close()
 
 
-    ''' Case 1: a phantom tuple that occurs in Repeatable Read and then disappears when we switch to Serializable.'''
-    #def scenario1():
 
 
 if __name__ == "__main__":
@@ -99,7 +148,11 @@ if __name__ == "__main__":
     demo.drop()
     demo.initialize()
     demo.showall()
+    demo.scenario0()
     demo.scenario1()
+    demo.scenario2()
+    demo.scenario3()
+    demo.scenario4()
     demo.showall()
     demo.close()
 
