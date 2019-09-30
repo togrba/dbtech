@@ -7,9 +7,7 @@ import pgdb
 # see http://www.pygresql.org/contents/tutorial.html#first-steps-with-the-db-api-2-0-interface
 
 #If you are using a local postgres server as user postgres with default database 'postgres'
-params = {'host':'localhost', 'user':'Bang', 'database':'Bang', 'password':''}
-#If you are using nestor2, copy this python file to u-shell and then execute there
-# params = {'host':'nestor2.csc.kth.se', 'user': 'your_kthusername', 'database':'', 'password':'your_postgres_password'}
+params = {'host':'localhost', 'user':'postgres', 'database':'postgres', 'password':''}
 
 # We work with two connections to the database, simulating concurrent users. These
 # connections could be remote, in separate programs etc, but we run them in the same file
