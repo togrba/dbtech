@@ -109,7 +109,7 @@ class Demo_program:
         print("DEMO: A phantom tuple that occurs in Nonrepeatable Read and then disappears when we switch to Serializable.\n")
         print("READ COMMITTED vs. SERIALIZABLE")
 
-        tr1 = "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;"
+        tr1 = "BEGIN TRANSACTION ISOLATION LEVEL READ COMMITTED;"
         tr2 = "BEGIN TRANSACTION ISOLATION LEVEL READ COMMITTED;"
         q_sel = "SELECT * FROM Sales;"
         q_ins = "INSERT INTO Sales VALUES('Kool Chair', 3000);"
@@ -200,13 +200,13 @@ class Demo_program:
             self.cursor2.execute(tr2)
             print("U2: (insert): "+ q_ins2)
             self.cursor2.execute(q_ins2)
-            print("U2: (insert - fail): "+ q_ins3)
+            print("U2: (insert): "+ q_ins3)
             self.cursor2.execute(q_ins3)
             print("U2: (commit): ", com)
             self.cursor2.execute(com)
         except:
             print("Insertion failed, rollback")
-            self.connection2.execute(com)
+            self.connection2.rollback()
 
         print("U1: (get all): ", q_sel)
         self.cursor1.execute(q_sel)

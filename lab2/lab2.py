@@ -12,7 +12,7 @@ cursor1 = connection1.cursor()
 
 # PART 1 --------------------------------------------------------------------
 # Year - population
-
+#
 # def query():
 #     # Here we test some concurrency issues.
 #     xy = "SELECT year, population FROM popdata";
@@ -46,11 +46,11 @@ cursor1 = connection1.cursor()
 # plt.show()  # display figure if you run this code locally
 # plt.savefig("figure.png") # save figure as image in local directory
 # close()
-
-
-# PART 2 --------------------------------------------------------------------
-# Number of cities - year
-
+#
+#
+# # PART 2 --------------------------------------------------------------------
+# # Number of cities - year
+#
 # def query():
 #     # Here we test some concurrency issues.
 #     xy = "SELECT year, COUNT(city) FROM popdata GROUP BY year";
