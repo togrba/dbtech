@@ -306,48 +306,144 @@ class Program_R:
         # print r;
 
     def step1(self):
-        q_sel = "SELECT * FROM R;"
-        com = "COMMIT;"
-
         tr1 = "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;"
+        # tr1 = "BEGIN TRANSACTION ISOLATION LEVEL READ COMMITTED;"
         print("U1: (start) " + tr1)
         self.cursor1.execute(tr1)
-        xval = "SELECT SUM(b) FROM R WHERE a=0;"  # a1
-        self.cursor1.execute(xval)
-        a1 = self.cursor1.fetchall()
-        print("U1: (a1) ", a1)
-        q_ins1 = "INSERT INTO R VALUES(1, a1);" #b1
-        print("U1: (insert b1) ", q_ins1)
-        self.cursor1.execute(q_ins1)
+        a1 = "SELECT SUM(b) FROM R WHERE a = 0;"  # xval
+        print("U1: (xval) ", a1)
+        self.cursor1.execute(a1)
+        xval = self.cursor1.fetchone()[0]
+        print("U1: xval = ", xval)
+        b1 = f"INSERT INTO R Values(1, {xval});"
+        print("U1: (insert xval)", b1)
+        self.cursor1.execute(b1)
+        q_sel = "SELECT * FROM R;"
+        print("U1: (get table) ", q_sel)
+        self.cursor1.execute(q_sel)
+        user_table = self.cursor1.fetchall()
+        print("... table R = " + str(user_table))
+        com = "COMMIT;"
         print("U1: (commit): ", com)
         self.cursor1.execute(com)
 
-        # print("U1: (get table) ", q_sel)
-        # self.cursor1.execute(q_sel)
-        # user_table = self.cursor1.fetchall()
-        # print("... table = " + str(user_table))
-
-
     def step2(self):
-        q_sel = "SELECT * FROM R;"
-        com = "COMMIT;"
-
+        print("----------------------------------------------------------------------------------------------------------")
         tr2 = "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;"
+        # tr1 = "BEGIN TRANSACTION ISOLATION LEVEL READ COMMITTED;"
         print("U2: (start) " + tr2)
         self.cursor2.execute(tr2)
-        xval2 = "SELECT SUM(b) FROM R WHERE a=0;" #a2
-        self.cursor2.execute(xval2)
-        print("U2: (a2) "), xval2
-        q_ins2 = "INSERT INTO R VALUES(0, xval2);" #b2
-        print("U2: (insert b2) ", q_ins2)
-        self.cursor2.execute(q_ins2)
+        a2 = "SELECT SUM(b) FROM R WHERE a = 1;"  # xval2
+        print("U2: (xval2) ", a2)
+        self.cursor2.execute(a2)
+        xval2 = self.cursor2.fetchone()[0]
+        print("U2: xval2 = ", xval2)
+        b2 = f"INSERT INTO R Values(0, {xval2});"
+        print("U2: (insert xval2)", b2)
+        self.cursor2.execute(b2)
+        q_sel = "SELECT * FROM R;"
+        print("U2: (get table) ", q_sel)
+        self.cursor2.execute(q_sel)
+        user_table = self.cursor2.fetchall()
+        print("... table R = " + str(user_table))
+        com = "COMMIT;"
         print("U2: (commit): ", com)
         self.cursor2.execute(com)
 
-        # print("U2: (get table) ", q_sel)
-        # self.cursor2.execute(q_sel)
-        # user_table = self.cursor2.fetchall()
-        # print("... table = " + str(user_table))
+# ============================ SWITCH ORDER ============================
+
+    def step3(self):
+        print("============================ SWITCH ORDER a2-b2-b1-b2 ============================")
+        tr1 = "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;"
+        print("U1: (start) " + tr1)
+        self.cursor1.execute(tr1)
+        tr2 = "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;"
+        print("U2: (start) " + tr2)
+        self.cursor2.execute(tr2)
+
+        a2 = "SELECT SUM(b) FROM R WHERE a = 1;"  # xval2
+        print("U2: (xval2) ", a2)
+        self.cursor2.execute(a2)
+        xval2 = self.cursor2.fetchone()[0]
+        print("U2: xval2 = ", xval2)
+
+        b2 = f"INSERT INTO R Values(0, {xval2});"
+        print("U2: (insert xval2)", b2)
+        self.cursor2.execute(b2)
+        q_sel = "SELECT * FROM R;"
+        print("U2: (get table) ", q_sel)
+        self.cursor2.execute(q_sel)
+        user_table = self.cursor2.fetchall()
+        print("... table R = " + str(user_table))
+        com = "COMMIT;"
+        print("U2: (commit): ", com)
+        self.cursor2.execute(com)
+
+        a1 = "SELECT SUM(b) FROM R WHERE a = 0;"  # xval
+        print("U1: (xval) ", a1)
+        self.cursor1.execute(a1)
+        xval = self.cursor1.fetchone()[0]
+        print("U1: xval = ", xval)
+
+        b1 = f"INSERT INTO R Values(1, {xval});"
+        print("U1: (insert xval)", b1)
+        self.cursor1.execute(b1)
+        q_sel = "SELECT * FROM R;"
+        print("U1: (get table) ", q_sel)
+        self.cursor1.execute(q_sel)
+        user_table = self.cursor1.fetchall()
+        print("... table R = " + str(user_table))
+        com = "COMMIT;"
+        print("U1: (commit): ", com)
+        self.cursor1.execute(com)
+
+    def step4(self):
+        print("============================ SWITCH ORDER a1-a2-b1-b2 ============================")
+        # tr1 = "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;"
+        tr1 = "BEGIN TRANSACTION ISOLATION LEVEL READ COMMITTED;"
+        print("U1: (start) " + tr1)
+        self.cursor1.execute(tr1)
+        # tr2 = "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE;"
+        tr2 = "BEGIN TRANSACTION ISOLATION LEVEL READ COMMITTED;"
+        print("U2: (start) " + tr2)
+        self.cursor2.execute(tr2)
+
+        a1 = "SELECT SUM(b) FROM R WHERE a = 0;"  # xval
+        print("U1: (xval) ", a1)
+        self.cursor1.execute(a1)
+        xval = self.cursor1.fetchone()[0]
+        print("U1: xval = ", xval)
+
+        a2 = "SELECT SUM(b) FROM R WHERE a = 1;"  # xval2
+        print("U2: (xval2) ", a2)
+        self.cursor2.execute(a2)
+        xval2 = self.cursor2.fetchone()[0]
+        print("U2: xval2 = ", xval2)
+
+        b1 = f"INSERT INTO R Values(1, {xval});"
+        print("U1: (insert xval)", b1)
+        self.cursor1.execute(b1)
+        q_sel = "SELECT * FROM R;"
+        print("U1: (get table) ", q_sel)
+        self.cursor1.execute(q_sel)
+        user_table = self.cursor1.fetchall()
+        print("... table R = " + str(user_table))
+        com = "COMMIT;"
+        print("U1: (commit): ", com)
+        self.cursor1.execute(com)
+
+        b2 = f"INSERT INTO R Values(0, {xval2});"
+        print("U2: (insert xval2)", b2)
+        self.cursor2.execute(b2)
+        q_sel = "SELECT * FROM R;"
+        print("U2: (get table) ", q_sel)
+        self.cursor2.execute(q_sel)
+        user_table = self.cursor2.fetchall()
+        print("... table R = " + str(user_table))
+        com = "COMMIT;"
+        print("U2: (commit): ", com)
+        self.cursor2.execute(com)
+
 
 
 if __name__ == "__main__":
@@ -357,6 +453,16 @@ if __name__ == "__main__":
     r.showall()
     r.step1()
     r.step2()
+    r.showall()
+
+    r.drop()
+    r.initialize()
+    r.step3()
+    r.showall()
+
+    r.drop()
+    r.initialize()
+    r.step4()
     r.showall()
 
 
