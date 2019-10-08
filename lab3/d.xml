@@ -1,0 +1,23 @@
+let $d:=doc("https://www.dbis.informatik.uni-goettingen.de/Mondial/mondial.xml")
+let $c := $d/mondial/country
+
+let $data := (
+  let $country_data := (
+    for $country in $c
+
+    let $city_data := (
+      for $city in $country//city
+
+      let $alias_data := (
+        for $name in $city/name
+        return      <alias>{$name/text()}</alias>
+        )
+
+      return    <city>{$city/@*[name() = "id"]}&#xa;{$alias_data}&#xa;    </city>)
+
+    let $country_name_tag :=  <country name="{$country/name}">&#xa;{$city_data}&#xa;  </country>
+    return $country_name_tag
+  )
+  return $country_data
+)
+return <mylist>&#xa;{$data}&#xa;</mylist>
