@@ -10,10 +10,10 @@ let $olddata:=(
 for $cit in $cities
 	for $city in $d/mondial/country//city	(: ger gammal info om Stockholm och New York :)
 	where $city/name = $cit
-	return ($city/name, $city/population)
+	return ($city/name, "&#xA;", $city/population)
 )
 
-return $olddata
+return (<database>&#xA;{$olddata}&#xA;</database>)
 
 (: return (<city name="{data($city/@name/text())}"<data>
 <year>{$year}</year><people>{$population}</people>
@@ -28,7 +28,7 @@ for $city in $cities
 
 
 :)
-(: 
+(:
 return
 <database>
 $result
