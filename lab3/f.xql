@@ -13,6 +13,7 @@ for $cit in $cities
 	return ($city/name, $city/population)
 )
 
+return $olddata
 
 (: return (<city name="{data($city/@name/text())}"<data>
 <year>{$year}</year><people>{$population}</people>
