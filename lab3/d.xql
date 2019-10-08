@@ -1,5 +1,5 @@
 let $d:=doc("https://www.dbis.informatik.uni-goettingen.de/Mondial/mondial.xml")
-let $output_d:=doc("file:///Users/Bang/code/dbtech/lab3/d.xml")/mylist/*
+let $d_output:=doc("file:///Users/Bang/code/dbtech/lab3/d_output.xml")/mylist/*
 
 let $c := $d/mondial/country
 
@@ -22,4 +22,4 @@ let $result_list := (
     return ("&#xA;", $country_name_tag)
 
 )
-return ($output_d, <mylist>{$result_list}&#xA;</mylist>)
+return (<mylist>{$result_list}&#xA;</mylist>, $d_output)
