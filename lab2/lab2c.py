@@ -8,7 +8,7 @@ from sys import argv
 class Program:
     def __init__(self): #PG-connection setup
         # local server:
-        params = {'host':'localhost', 'user':'postgres', 'database':'postgres', 'password':''}
+        params = {'host':'localhost', 'user':'postgres', 'database':'postgres', 'password':'Kth_derp667'}
         # kth server:
         # params = {'host':'nestor2.csc.kth.se', 'user': 'yourkthusername', 'database':'', 'password':'yournestorpassword'}
         self.conn = pgdb.Connection(**params)
