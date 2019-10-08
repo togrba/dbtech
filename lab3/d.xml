@@ -1,23 +1,54 @@
 let $d:=doc("https://www.dbis.informatik.uni-goettingen.de/Mondial/mondial.xml")
-let $c := $d/mondial/country
+    <mylist>
+for $country in $d/mondial/country
+return
+        <country name="{$country/name}">
+        let $cityids:=$d/mondial/country/city
+        for $cityid in $cityids
+        return
+            <city id="{data($cityid/@id/text())}">
+                let $aka:=$d/mondial/country/city[(@id)]/name
+                for $alias in $aka
+                return
+                    <alias>
+                        {$alias/text()}
+                    </alias>
+            </city>
+        </country>
+    </mylist>
 
-let $data := (
-  let $country_data := (
-    for $country in $c
-
-    let $city_data := (
-      for $city in $country//city
-
-      let $alias_data := (
-        for $name in $city/name
-        return      <alias>{$name/text()}</alias>
-        )
-
-      return    <city>{$city/@*[name() = "id"]}&#xa;{$alias_data}&#xa;    </city>)
-
-    let $country_name_tag :=  <country name="{$country/name}">&#xa;{$city_data}&#xa;  </country>
-    return $country_name_tag
-  )
-  return $country_data
-)
-return <mylist>&#xa;{$data}&#xa;</mylist>
+<!-- (:
+for $data in $d/mondial/country/name
+return
+    <mylist>
+        {$data}
+    </mylist>
+GER:
+<mylist><name>Albania</name></mylist>
+<mylist><name>Greece</name></mylist>
+....DVS ländernas namn
+for $data in $d/mondial/country/city[(@id)]/name
+return
+    <mylist>
+        {$data}
+    </mylist>
+GER:
+<mylist><name>Tirana</name></mylist>
+<mylist><name>Tirane</name></mylist>
+<mylist><name>Shkodër</name></mylist>
+.... DVS städernas olika alias
+for $cityid in $d/mondial/country/city
+return
+    <mylist>
+    {data($cityid/@id)}
+    </mylist>
+GER:
+<mylist>cty-Albania-Tirane</mylist>
+<mylist>stadt-Shkoder-AL-AL</mylist>
+....DVS city id
+<country name="{$country/name}">
+GER:
+<country name ="Albania">
+<country name ="Greece">
+.... {} returns values, without these - the expression/query itself is returned as a string
+:) -->
