@@ -26,8 +26,26 @@ let $olddata:=(
 			)
 			return $our_years
 		)
-		let $our_city := <city name="{$city/name}">&#xa;{$data}</city>
+		let $our_city := <city name="{$city/name}">&#xa;{$data}</city> (: REMOVE TAGS AND STUFF :)
 		return $our_city
 )
 
-return (<database>&#xA;{$newdata_list}&#xA;{$olddata}&#xA;</database>)
+let $output_data:=(
+	let $combined_data:=($newdata_list, $olddata)
+	return $combined_data
+)
+
+let $test:=(
+	for $city in $our_cities  				(: output: Stockholm New York :)
+		for $output in $output_data
+		where $city = data($output/@name)
+		let $data:=(
+			for $o_city in $output
+			return $o_city
+		)
+		return $output
+)
+
+
+(: return (<database>&#xA;{$newdata_list}&#xA;{$olddata}&#xA;</database>) :)
+return (<database>&#xA;{$test}&#xA;</database>)
