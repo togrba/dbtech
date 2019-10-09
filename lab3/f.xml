@@ -31,20 +31,15 @@ let $olddata:=(
 )
 
 let $output_data:=(
-	let $combined_data:=($newdata_list, $olddata)
-	return $combined_data
-)
-
-let $test:=(
 	for $city in $our_cities
-		for $output in $output_data
-		where $city = data($output/@name)
-			for $o_city in $output
-			return $o_city
+	let $combined_data:=($newdata_list, $olddata)
+	for $output in $combined_data
+	where $city = data($output/@name)
+		for $data in $output
+		return ($data, "&#xA;")
 )
 
 
-(: return (<database>&#xA;{$newdata_list}&#xA;{$olddata}&#xA;</database>) :)
-return ($output_data, "&#xA;", <database>&#xA;{$test}&#xA;</database>)
+return (<database>&#xA;{$output_data}</database>)
 
 (: Write output to file: xqilla f.xql > f_output.xml :)
