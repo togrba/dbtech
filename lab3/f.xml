@@ -1,5 +1,5 @@
 let $d:=doc("https://www.dbis.informatik.uni-goettingen.de/Mondial/mondial.xml")
-let $newdata := doc("newdata.xml")
+let $newdata:=doc("newdata.xml")
 
 let $our_cities:=(
 	for $city in $newdata/database/city
@@ -26,7 +26,7 @@ let $olddata:=(
 			)
 			return $our_years
 		)
-		let $our_city := <city name="{$city/name}">&#xa;{$data}</city> (: REMOVE TAGS AND STUFF :)
+		let $our_city := <city name="{$city/name}">&#xa;{$data}</city>
 		return $our_city
 )
 
@@ -36,16 +36,15 @@ let $output_data:=(
 )
 
 let $test:=(
-	for $city in $our_cities  				(: output: Stockholm New York :)
+	for $city in $our_cities
 		for $output in $output_data
 		where $city = data($output/@name)
-		let $data:=(
 			for $o_city in $output
 			return $o_city
-		)
-		return $output
 )
 
 
 (: return (<database>&#xA;{$newdata_list}&#xA;{$olddata}&#xA;</database>) :)
-return (<database>&#xA;{$test}&#xA;</database>)
+return ($output_data, "&#xA;", <database>&#xA;{$test}&#xA;</database>)
+
+(: Write output to file: xqilla f.xql > f_output.xml :)

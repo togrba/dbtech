@@ -23,3 +23,6 @@ let $result_list := (
 
 )
 return (<mylist>{$result_list}&#xA;</mylist>, $d_output)
+
+
+(: Write output to file: xqilla d.xql > d_output.xml :)
