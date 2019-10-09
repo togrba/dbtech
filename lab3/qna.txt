@@ -1,7 +1,5 @@
 d:
 - indentation not ok
-- file save?
 
 f:
-- return as new file
-- order
+- double cities, but in the correct order
