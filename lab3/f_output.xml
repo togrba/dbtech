@@ -1,62 +1,62 @@
 <database>
 <city name="Stockholm">
 <data>
-    <year>2018</year>
-    <people>962154</people>
+     <year>2018</year>
+     <people>962154</people>
 </data>
 <data>
-    <year>2017</year>
-    <people>949761</people>
+     <year>2017</year>
+     <people>949761</people>
 </data>
 <data>
-    <year>2016</year>
-    <people>935619</people>
+     <year>2016</year>
+     <people>935619</people>
 </data>
 </city>
 <city name="Stockholm">
 <data>
-    <year>1995</year>
-    <people>711119</people>
+     <year>2012</year>
+     <people>881235</people>
 </data>
 <data>
-    <year>2002</year>
-    <people>758148</people>
+     <year>2009</year>
+     <people>829417</people>
 </data>
 <data>
-    <year>2009</year>
-    <people>829417</people>
+     <year>2002</year>
+     <people>758148</people>
 </data>
 <data>
-    <year>2012</year>
-    <people>881235</people>
-</data>
-</city>
-<city name="New York">
-<data>
-    <year>2018</year>
-    <people>19491339</people>
+     <year>1995</year>
+     <people>711119</people>
 </data>
 </city>
 <city name="New York">
 <data>
-    <year>1980</year>
-    <people>7071639</people>
+     <year>2018</year>
+     <people>19491339</people>
+</data>
+</city>
+<city name="New York">
+<data>
+     <year>2013</year>
+     <people>8405837</people>
 </data>
 <data>
-    <year>1990</year>
-    <people>7322564</people>
+     <year>2010</year>
+     <people>8175136</people>
 </data>
 <data>
-    <year>2000</year>
-    <people>8009185</people>
+     <year>2000</year>
+     <people>8009185</people>
 </data>
 <data>
-    <year>2010</year>
-    <people>8175136</people>
+     <year>1990</year>
+     <people>7322564</people>
 </data>
 <data>
-    <year>2013</year>
-    <people>8405837</people>
+     <year>1980</year>
+     <people>7071639</people>
 </data>
 </city>
 </database>
