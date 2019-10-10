@@ -30,32 +30,37 @@ let $olddata:=(
 		return $our_city
 )
 
-(:
+
 let $hey:=(
 for $s1 in $newdata_list
 where $s1//@name = "Stockholm"   	(: GER RÄTT INFO FRÅN NEWDATA DÄR CITY NAME = STOCKHOLM :)
 return $s1//data
 )
-return $hey
+let $hey2:=(
+for $s1 in $olddata
+where $s1//@name = "Stockholm"   	(: GER RÄTT INFO FRÅN OLDDATA DÄR CITY NAME = STOCKHOLM :)
+return $s1//data
+)
+(: return ($hey,$hey2) 
+return <city name="Stockholm">{($hey,$hey2)}</city>
 :)
-
-
-(:										(:FUNKAR FÖR SPECIFICERAD STAD, SER RÄTT UT:)
-let $oldsort:=(for $y in $olddata where $y//@name = "Stockholm" return $y/*)
-let $sorteddata:=(for $x in $newdata_list where $x//@name = "Stockholm" return <city name="{$x//@name}">&#xa;{$x/*}{$oldsort}&#xa;</city>)
+(:										(:FUNKAR FÖR SPECIFICERAD STAD, SER HALVRÄTT UT:)
+let $oldsort:=(for $y in $olddata where $y//@name = "Stockholm" return $y//data)
+let $sorteddata:=(for $x in $newdata_list where $x//@name = "Stockholm" return <city name="{$x//@name}">&#xa;{$x//data,$oldsort}&#xa;</city>)
 return $sorteddata
 :)
 
-
 (:
-let $result:=(									(: DET VI VILL HA UTAN HÅRDKODNING, FUNKAR EJ :)
-	let $c:=(for $city in $our_cities return $city)
-		let $oldsort:=(for $y in $olddata where $y//@name = "{data($c)}" return $y/*)
-		let $sorteddata:=(for $x in $newdata_list where $x//@name = "{data($c)}" return <city name="{$x//@name}">&#xa;{$x/*}{$oldsort}&#xa;</city>)
+let $result:=(									(: DET VI VILL HA UTAN HÅRDKODNING, FUNKAR EJ TROTS ASSE-HJÄLP:)
+	for $c in $our_cities
+	let $oldsort:=(for $y in $olddata where $y//@name = "{data($c)}" return $y/*)
+	let $sorteddata:=(for $x in $newdata_list where $x//@name = "{data($c)}" return <city name="{$x//@name}">&#xa;{$x/*}{$oldsort}&#xa;</city>)
 	return $sorteddata
 )
-return $result :)
+return $result
+:)
 
+											(: HÅRDKODAT, RÄTT OUTPUT FÖROTUM </data><data> :)
 let $oldsto:=(for $y in $olddata where $y//@name = "Stockholm" return $y/*)
 let $sortedsto:=(for $x in $newdata_list where $x//@name = "Stockholm" return <city name="{$x//@name}">&#xa;{$x/*}{$oldsto}&#xa;</city>)
 let $oldny:=(for $y in $olddata where $y//@name = "New York" return $y/*)
