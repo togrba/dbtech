@@ -3,12 +3,12 @@ let $newdata:=doc("newdata.xml")
 
 let $our_cities:=(
 	for $city in $newdata/database/city
-	return data($city/@name)					(: output: Stockholm New York :)
+	return data($city/@name)					(: outputs Stockholm New York :)
 )
 
 let $newdata_list:=(
-	for $all in $newdata/database/city
-	return $all						(: output: original newdata :)
+	for $allnew in $newdata/database/*
+	return $allnew						(: outputs original newdata :)
 )
 
 let $olddata:=(
@@ -30,16 +30,25 @@ let $olddata:=(
 		return $our_city
 )
 
-let $output_data:=(
-	for $city in $our_cities
-	let $combined_data:=($newdata_list, $olddata)
-	for $output in $combined_data
-	where $city = data($output/@name)
-		for $data in $output
-		return ($data, "&#xA;")
+
+let $oldsto:=(
+	for $y in $olddata
+	where $y//@name = "Stockholm"
+	return $y/*
 )
-
-
-return (<database>&#xA;{$output_data}</database>)
-
-(: Write output to file: xqilla f.xql > f_output.xml :)
+let $sortedsto:=(
+	for $x in $newdata_list
+	where $x//@name = "Stockholm"
+	return <city name="{$x//@name}">&#xa;{$x/*}{$oldsto}&#xa;</city>
+)
+let $oldny:=(
+	for $y in $olddata
+	where $y//@name = "New York"
+	return $y/*
+)
+let $sortedny:=(
+	for $x in $newdata_list
+	where $x//@name = "New York"
+	return <city name="{$x//@name}">&#xa;{$x/*}{$oldny}&#xa;</city>
+)
+return ($sortedsto,$sortedny)

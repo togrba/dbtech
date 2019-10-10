@@ -1,41 +1,44 @@
 let $d:=doc("https://www.dbis.informatik.uni-goettingen.de/Mondial/mondial.xml")
-let $newdata := doc("newdata.xml")
+let $newdata:=doc("newdata.xml")
 
-let $cities:=(
-for $city in $newdata/database/city
-return data($city/@name)
-)					(: ger Stockholm och New York på varsin rad :)
+let $our_cities:=(
+	for $city in $newdata/database/city
+	return data($city/@name)					(: output: Stockholm New York :)
+)
+
+let $newdata_list:=(
+	for $all in $newdata/database/city
+	return $all						(: output: original newdata :)
+)
 
 let $olddata:=(
-for $cit in $cities
-	for $city in $d/mondial/country//city	(: ger gammal info om Stockholm och New York :)
-	where $city/name = $cit
-	return ($city/name, "&#xA;", $city/population)
+	for $cit in $our_cities
+		for $city in $d/mondial/country//city					(: ger gammal info om Stockholm och New York :)
+		where $city/name = $cit
+		let $data := (
+			let $our_pops := $city/population
+			let $our_years := (
+					for $year_data in $our_pops
+					let $year := ("&#x20;", "&#x20;", "&#x20;", <year>{data($year_data/@year)}</year>)
+					let $year_pop := ("&#x20;", "&#x20;", "&#x20;", <people>{$year_data[@year]/text()}</people>)
+					order by data($year_data/@year) descending
+					return (<data>&#xA;{$year}&#xA;{$year_pop}&#xA;</data>, "&#xA;")
+			)
+			return $our_years
+		)
+		let $our_city := <city name="{$city/name}">&#xa;{$data}</city>
+		return $our_city
 )
 
-return (<database>&#xA;{$olddata}&#xA;</database>)
-
-(: return (<city name="{data($city/@name/text())}"<data>
-<year>{$year}</year><people>{$population}</people>
-</data></city>)
-
-let $result:=(
-for $city in $cities
-	return
-	<city name="{$city/name}">
-	<data><year>{$city/year}</year><people>{$city/people}</people></city>
+let $output_data:=(
+	for $city in $our_cities
+	let $combined_data:=($newdata_list, $olddata)
+	for $output in $combined_data
+	where $city = data($output/@name)
+		for $data in $output
+		return ($data, "&#xA;")
 )
 
+return (<database>&#xA;{$real}</database>)
 
-:)
-(:
-return
-<database>
-$result
-</database> :)
-
-(:
-let $s1 := ('a', 'b')
-let $s2 := ('a', 'c')
-return ($s1, $s2) --> ('a','b','a','c')
-:)
+(: Write output to file: xqilla f.xql > f_output.xml :)
