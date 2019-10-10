@@ -1,5 +1,2 @@
-d:
-- city end tag dissappeared
-
 f:
 - double cities, but in the correct order
